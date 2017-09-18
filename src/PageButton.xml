@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="com.mendix.widget.custom.pagebutton.PageButton" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>Page button</name>
+    <description>Add boostrap like paging to your list view</description>
+    <icon></icon>
+    <properties>
+        <property key="autoHideFirstLastButton" type="boolean" defaultValue="false">
+            <caption>Hide first, last button</caption>
+            <category>Appearance</category>
+            <description>Hide first and last button</description>
+        </property>
+        <property key="perPage" type="integer" defaultValue="10">
+            <caption>Per page</caption>
+            <category>Appearance</category>
+            <description>Number of items to be shown on a page</description>
+        </property>
+    </properties>
+</widget>
