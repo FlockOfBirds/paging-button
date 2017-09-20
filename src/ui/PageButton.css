@@ -1,3 +1,6 @@
 .widget-page-button .pagebutton {
     position: relative;
 }
+.widget-page-button .custom-listview-page-button {
+    display: none;
+}

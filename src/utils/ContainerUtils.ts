@@ -1,25 +1,37 @@
+export type ButtonType = "first" | "next" | "previous" | "last";
+
+export interface PageButtonContainerProps extends WrapperProps {
+    hideUnusedPaging?: boolean;
+}
+
 export interface WrapperProps {
     "class"?: string;
-    mxform: mxui.lib.form._FormBase;
     friendlyId: string;
+    mxform: mxui.lib.form._FormBase;
     style: string;
 }
 
-export interface PageButtonState {
-    alertMessage?: string;
-    targetListview?: ListView;
-    targetNode?: HTMLElement;
+export interface PageButtonContainerState {
+    hidePageButton?: boolean;
     findingListviewWidget: boolean;
+    statusMessage: string;
+    targetListView?: ListView;
+    targetNode?: HTMLElement;
     validationPassed?: boolean;
 }
 
 export interface ListView extends mxui.widget._WidgetBase {
     _datasource: {
-        _setsize: number;
-        _setSize: number;
+        atBeginning: () => boolean;
         atEnd: () => boolean;
-        _pageSize: number;
+        first: () => void;
+        last: () => void;
+        next: () => void;
+        previous: () => void;
+        getStatusMessage: () => string;
     };
+    _showLoadingIcon: () => void;
+    sequence: (sequence: string[]) => void;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {

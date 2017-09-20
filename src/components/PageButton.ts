@@ -1,34 +1,46 @@
-import {Component, createElement} from "react";
-import {MendixButton} from "./MendixButton";
+import { Component, createElement } from "react";
+import * as classNames from "classnames";
+
+import { MendixButton } from "./MendixButton";
+import { ButtonType } from "../utils/ContainerUtils";
 
 export interface PageButtonProps {
-    onClickAction: (pageNumber: number) => void;
-    pageSize: number;
+    onClickAction: (buttonClicked: string) => void;
+    hidePageButton?: boolean;
+    statusMessage: string;
 }
 
 export interface PageButtonState {
-    pageNumber: number;
-    status: string;
+    buttonClicked?: ButtonType;
+    isVisible?: boolean;
+    statusMessage: string;
 }
-
 
 export class PageButton extends Component<PageButtonProps, PageButtonState> {
     constructor(props: PageButtonProps) {
         super(props);
 
-        this.state = {pageNumber: 1, status};
+        this.state = {
+            buttonClicked: "first",
+            isVisible: this.props.hidePageButton,
+            statusMessage: this.props.statusMessage
+        };
         this.firstPageClickAction = this.firstPageClickAction.bind(this);
         this.lastPageClickAction = this.lastPageClickAction.bind(this);
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
-        this.nextPageClickAction = this.nextPageClickAction.bind(this);
-
+        this.previousPageClickAction = this.previousPageClickAction.bind(this);
+        this.callOnClickAction = this.callOnClickAction.bind(this);
     }
 
     render() {
-        return createElement("div", {className: "mx-grid-pagingbar"},
+        return createElement("div", {
+                className:  classNames("page-button",
+                    `visible: ${this.state.isVisible ? "visible" : "hidden"}`
+                )
+            },
             createElement(MendixButton, {
                 buttonType: "first",
-                glyphIcon: "backward" ,
+                glyphIcon: "backward",
                 onClickAction: this.firstPageClickAction
             }),
             createElement(MendixButton, {
@@ -36,8 +48,8 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
                 glyphIcon: "backward",
                 onClickAction: this.previousPageClickAction
             }),
-            createElement("div", {className: "dijitInline mx-grid-paging-status"},
-                this.state.status
+            createElement("span", { className: "paging-status" },
+                this.state.statusMessage
             ),
             createElement(MendixButton, {
                 buttonType: "next",
@@ -48,37 +60,37 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
                 buttonType: "last",
                 glyphIcon: "forward",
                 onClickAction: this.lastPageClickAction
-            }),
+            })
         );
     }
 
-    componentDidMount() {
-        this.setState({ status: this.getPagingStatus()})
+    componentWillReceiveProps(nextProps: PageButtonProps) {
+        this.setState({ statusMessage: nextProps.statusMessage });
     }
 
-    componentDidUpdate(_prevProps: PageButtonProps, _prevState: PageButtonState){
-        this.setState({ status: this.getPagingStatus()})
-        this.props.onClickAction(this.state.pageNumber);
+    componentDidUpdate(_prevProps: PageButtonProps, _prevState: PageButtonState) {
+        this.callOnClickAction();
     }
 
     private firstPageClickAction() {
-        this.setState({ pageNumber: 1 })
+        this.setState({ buttonClicked: "first" });
     }
 
     private nextPageClickAction() {
-        this.setState({ pageNumber: this.state.pageNumber + 1})
+        this.setState({ buttonClicked: "next" });
     }
 
     private previousPageClickAction() {
-        this.setState({ pageNumber: this.state.pageNumber - 1})
-    }
-    private lastPageClickAction() {
-        this.setState({ pageNumber: this.props.pageSize})
+        this.setState({ buttonClicked: "previous" });
     }
 
-    private getPagingStatus(){
-        const from = 1;
-        const to = 2;
-        return `${from} to ${to} of ${this.props.pageSize}`
+    private lastPageClickAction() {
+        this.setState({ buttonClicked: "last" });
+    }
+
+    private callOnClickAction() {
+        if (this.state.buttonClicked) {
+            this.props.onClickAction(this.state.buttonClicked);
+        }
     }
 }

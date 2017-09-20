@@ -38,10 +38,15 @@ export class ValidateConfigs extends Component<ValidateConfigProps, {}> {
     static isCompatible(targetListView: ListView): boolean {
         return !!(targetListView
             && targetListView._datasource
+            && targetListView._datasource.atBeginning
             && targetListView._datasource.atEnd
-            && typeof targetListView._datasource._pageSize !== "undefined"
-            && (typeof targetListView._datasource._setsize !== "undefined"
-                || typeof targetListView._datasource._setSize !== "undefined"));
+            && targetListView._datasource.first
+            && targetListView._datasource.next
+            && targetListView._datasource.previous
+            && targetListView._datasource.last
+            && targetListView._datasource.getStatusMessage
+            && targetListView._showLoadingIcon
+            && targetListView.sequence);
     }
 
     static findTargetNode(queryNode: HTMLElement): HTMLElement | null {

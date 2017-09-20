@@ -3,16 +3,16 @@ import { findDOMNode } from "react-dom";
 
 import { PageButton } from "./components/PageButton";
 import { ValidateConfigs } from "./components/ValidateConfigs";
-import { PageButtonState, WrapperProps } from "./utils/ContainerUtils";
+import { PageButtonContainerProps, PageButtonContainerState, WrapperProps } from "./utils/ContainerUtils";
 
 declare function require(name: string): string;
 
 // tslint:disable-next-line class-name
-export class preview extends Component<WrapperProps, PageButtonState> {
-    constructor(props: WrapperProps) {
+export class preview extends Component<PageButtonContainerProps, PageButtonContainerState> {
+    constructor(props: PageButtonContainerProps) {
         super(props);
 
-        this.state = { findingListviewWidget: true };
+        this.state = { findingListviewWidget: true, statusMessage: "--" };
     }
 
     render() {
@@ -21,32 +21,53 @@ export class preview extends Component<WrapperProps, PageButtonState> {
                 ...this.props as WrapperProps,
                 inWebModeler: true,
                 queryNode: this.state.targetNode,
-                targetListview: this.state.targetListview,
+                targetListview: this.state.targetListView,
                 validate: !this.state.findingListviewWidget
             }),
             createElement(PageButton, {
                 onClickAction: () => { return; },
-                pageSize: this.state.targetListview ? this.state.targetListview._datasource._pageSize: 0
+                statusMessage: `[ 1 to 5 of 20 ]`
             })
         );
     }
 
     componentDidMount() {
-        this.validateConfigs();
+        this.validateConfigs(this.props);
     }
 
-    componentWillReceiveProps(_newProps: WrapperProps) {
-        this.validateConfigs();
+    componentWillReceiveProps(newProps: WrapperProps) {
+        this.validateConfigs(newProps);
     }
 
-    private validateConfigs() {
-        const routeNode = findDOMNode(this) as HTMLElement;
-        const targetNode = ValidateConfigs.findTargetNode(routeNode);
+    private validateConfigs(props: WrapperProps) {
+        const queryNode = findDOMNode(this) as HTMLElement;
+        const targetNode = ValidateConfigs.findTargetNode(queryNode);
 
         if (targetNode) {
+            this.transformListView(targetNode);
             this.setState({ targetNode });
         }
-        this.setState({ findingListviewWidget: true });
+        const validateMessage = ValidateConfigs.validate({
+            ...props as WrapperProps,
+            queryNode: this.state.targetNode,
+            targetListview: this.state.targetListView,
+            validate: !this.state.findingListviewWidget
+        });
+        this.setState({ findingListviewWidget: false, validationPassed: !validateMessage });
+    }
+
+    private transformListView(targetNode: HTMLElement) {
+        const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+
+        if (buttonNode) {
+            buttonNode.style.display = "none";
+        }
+        if (this.props.hideUnusedPaging === true) {
+            this.setState({ hidePageButton: true });
+
+        }else {
+            this.setState({ hidePageButton: false });
+        }
     }
 }
 

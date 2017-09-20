@@ -1,23 +1,23 @@
-import {SFC, createElement} from "react";
+import { SFC, createElement } from "react";
 import * as classNames from "classnames";
 
-export type ButtonType = "first" | "next" | "previous" | "last"
+import { ButtonType } from "../utils/ContainerUtils";
 
-export interface PageButtonProps {
+interface MendixButtonProps {
     buttonType: ButtonType;
     className?: string;
     glyphIcon: string;
     onClickAction: () => void;
 }
 
-export const MendixButton: SFC<PageButtonProps> = (props) =>
+export const MendixButton: SFC<MendixButtonProps> = (props) =>
     createElement("button", {
             className: classNames(`btn mx-button mx-name-paging-${props.buttonType}`, props.className),
-            onClick: props.onClickAction,
+            onClick: props.onClickAction
         },
         createElement("span", {
-            className: `glyphicon glyphicon-step-${props.glyphIcon}`,
+            className: `glyphicon glyphicon-step-${props.glyphIcon}`
         })
-    )
+    );
 
 MendixButton.displayName = "MendixButton";
