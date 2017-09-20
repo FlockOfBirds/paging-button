@@ -41,7 +41,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
             },
             createElement(MendixButton, {
                 buttonType: "first",
-                glyphIcon: "backward",
+                glyphIcon: "step-backward",
                 onClickAction: this.firstPageClickAction
             }),
             createElement(MendixButton, {
@@ -59,7 +59,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
             }),
             createElement(MendixButton, {
                 buttonType: "last",
-                glyphIcon: "forward",
+                glyphIcon: "step-forward",
                 onClickAction: this.lastPageClickAction
             })
         );

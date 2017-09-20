@@ -16,7 +16,7 @@ export const MendixButton: SFC<MendixButtonProps> = (props) =>
             onClick: props.onClickAction
         },
         createElement("span", {
-            className: `glyphicon glyphicon-step-${props.glyphIcon}`
+            className: `glyphicon glyphicon-${props.glyphIcon}`
         })
     );
 

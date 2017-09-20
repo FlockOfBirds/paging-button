@@ -4,3 +4,15 @@
 .widget-page-button .custom-listview-page-button {
     display: none;
 }
+
+.widget-page-button .mx-button {
+    padding: 12px;
+    color: #999;
+    border-color: transparent;
+}
+
+.widget-page-button .btn:hover, .widget-page-button .btn:focus, .widget-page-button .btn:active {
+    color: #0595DB;
+    border-color: transparent;
+    background-color: transparent;
+}
