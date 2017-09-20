@@ -12,9 +12,10 @@ export interface WrapperProps {
 }
 
 export interface PageButtonContainerState {
-    showPageButton?: boolean;
     findingListviewWidget: boolean;
-    statusMessage: string;
+    maxPageSize: number;
+    offSet: number;
+    showPageButton?: boolean;
     targetListView?: ListView;
     targetNode?: HTMLElement;
     validationPassed?: boolean;
@@ -29,9 +30,19 @@ export interface ListView extends mxui.widget._WidgetBase {
         next: () => void;
         previous: () => void;
         getStatusMessage: () => string;
+        getObjects: () => any;
+        getOffset: () => any
+        setOffset: (offSet: number) => void;
+        _setSize: number;
+        _pageSize: number;
+        clean: () => void;
+        reload: () => void;
+        destroy: () => void;
     };
     _showLoadingIcon: () => void;
     sequence: (sequence: string[]) => void;
+    _itemList: any;
+    update: () => void;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {

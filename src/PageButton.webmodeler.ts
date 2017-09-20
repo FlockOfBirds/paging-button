@@ -12,7 +12,7 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
     constructor(props: PageButtonContainerProps) {
         super(props);
 
-        this.state = { findingListviewWidget: true, statusMessage: "--" };
+        this.state = { findingListviewWidget: true, maxPageSize: 0, offSet: 1 };
     }
 
     render() {
@@ -25,8 +25,9 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
                 validate: !this.state.findingListviewWidget
             }),
             createElement(PageButton, {
-                onClickAction: () => { return; },
-                statusMessage: `[ 1 to 5 of 20 ]`
+                maxPageSize: this.state.maxPageSize,
+                offSet: this.state.offSet,
+                onClickAction: () => { return; }
             })
         );
     }
@@ -53,7 +54,12 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
             targetListview: this.state.targetListView,
             validate: !this.state.findingListviewWidget
         });
-        this.setState({ findingListviewWidget: false, validationPassed: !validateMessage });
+        this.setState({
+            findingListviewWidget: false,
+            maxPageSize: 10,
+            offSet: 1,
+            validationPassed: !validateMessage
+        });
     }
 
     private transformListView(targetNode: HTMLElement) {

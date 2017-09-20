@@ -9,7 +9,6 @@ import * as dojoAspect from "dojo/aspect";
 import { PageButton, PageButtonProps } from "./PageButton";
 import { ValidateConfigs } from "./ValidateConfigs";
 import {
-    ButtonType,
     ListView,
     PageButtonContainerProps,
     PageButtonContainerState,
@@ -27,8 +26,9 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
 
         this.state = {
             findingListviewWidget: true,
-            showPageButton: true,
-            statusMessage: ""
+            maxPageSize: 0,
+            offSet: 1,
+            showPageButton: true
         };
         this.updateListView = this.updateListView.bind(this);
         this.transformListView = this.transformListView.bind(this);
@@ -63,9 +63,10 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
     private renderPageButton(): ReactElement<PageButtonProps> | null {
         if (this.state.validationPassed) {
             return createElement(PageButton, {
+                maxPageSize: this.state.maxPageSize,
+                offSet: this.state.offSet,
                 onClickAction: this.updateListView,
-                showPageButton: this.state.showPageButton,
-                statusMessage: this.state.statusMessage
+                showPageButton: this.state.showPageButton
             });
         }
 
@@ -84,10 +85,7 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
 
                 if (targetListView) {
                     this.transformListView(targetNode, targetListView);
-                    this.setState({
-                        statusMessage: targetListView._datasource.getStatusMessage(),
-                        targetListView
-                    });
+                    this.setState({ targetListView });
                 }
             }
             const validateMessage = ValidateConfigs.validate({
@@ -103,6 +101,10 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
     private transformListView(targetNode: HTMLElement, listView: ListView) {
         const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
 
+        this.setState({
+            maxPageSize: listView._datasource._setSize,
+            offSet: listView._datasource._pageSize
+        });
         if (buttonNode) {
             buttonNode.style.display = "none";
         }
@@ -113,20 +115,19 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
         });
     }
 
-    private updateListView(buttonClicked: ButtonType) {
-        if (this.state.targetListView && this.state.targetListView._datasource && this.state.validationPassed) {
+    private updateListView(offSet: number) {
+        if (this.state.targetListView && this.state.targetNode
+            && this.state.targetListView._datasource
+            && this.state.validationPassed) {
+            const targetNode = this.state.targetNode;
+            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+            listNode.innerHTML = "";
+
             const listView = this.state.targetListView;
             const dataSource = listView._datasource;
-
-            if (buttonClicked === "first") {
-                dataSource.first();
-            } else if (buttonClicked === "next") {
-                dataSource.next();
-            } else if (buttonClicked === "previous") {
-                dataSource.previous();
-            } else {
-                dataSource.last();
-            }
+            // dataSource.clean();
+            dataSource.setOffset(offSet);
+            // dataSource.reload();
             listView._showLoadingIcon();
             listView.sequence([ "_sourceReload", "_renderData" ]);
         }
