@@ -21,7 +21,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         super(props);
 
         this.state = {
-            currentOffSet: 1,
+            currentOffSet: 0,
             isVisible: this.props.showPageButton,
             statusMessage: ""
         };
@@ -79,7 +79,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
 
     private firstPageClickAction() {
         const { maxPageSize, offSet } = this.props;
-        const currentOffSet = 1;
+        const currentOffSet = 0;
 
         this.setState({ currentOffSet });
         this.setMessageStatus(currentOffSet, offSet, maxPageSize);
@@ -99,15 +99,17 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         const currentOffSet = this.state.currentOffSet - this.props.offSet;
         const { offSet, maxPageSize } = this.props;
 
-        if (currentOffSet > 0) {
+        if (currentOffSet >= 0) {
             this.setState({ currentOffSet });
             this.setMessageStatus(currentOffSet, offSet, maxPageSize);
         }
     }
 
     private lastPageClickAction() {
-        const currentOffSet = this.props.maxPageSize - this.props.offSet;
         const { offSet, maxPageSize } = this.props;
+        const currentOffSet = (maxPageSize % offSet) === 0
+         ? maxPageSize - offSet
+         : maxPageSize - (maxPageSize % offSet);
 
         if (currentOffSet > 0) {
             this.setState({ currentOffSet });
@@ -116,10 +118,19 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
     }
 
     private setMessageStatus(currentOffSet: number, offSet: number, maxPageSize: number) {
+        let fromValue = currentOffSet + 1;
+        let toValue = 0;
+        if (maxPageSize === 0) {
+            fromValue = 0;
+        } else if (maxPageSize < offSet || (currentOffSet + offSet) > maxPageSize) {
+            toValue = maxPageSize;
+        } else {
+            toValue = currentOffSet + offSet;
+        }
         const statusMessage = window.mx.ui.translate(
             "mxui.lib.MxDataSource",
             "status",
-            [ currentOffSet, currentOffSet - 1 + offSet, maxPageSize ]);
+            [ fromValue, toValue, maxPageSize ]);
         this.setState({ statusMessage });
     }
 
