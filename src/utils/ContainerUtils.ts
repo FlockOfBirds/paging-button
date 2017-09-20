@@ -12,7 +12,7 @@ export interface WrapperProps {
 }
 
 export interface PageButtonContainerState {
-    hidePageButton?: boolean;
+    showPageButton?: boolean;
     findingListviewWidget: boolean;
     statusMessage: string;
     targetListView?: ListView;

@@ -6,7 +6,7 @@ import { ButtonType } from "../utils/ContainerUtils";
 
 export interface PageButtonProps {
     onClickAction: (buttonClicked: string) => void;
-    hidePageButton?: boolean;
+    showPageButton?: boolean;
     statusMessage: string;
 }
 
@@ -22,7 +22,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
 
         this.state = {
             buttonClicked: "first",
-            isVisible: this.props.hidePageButton,
+            isVisible: this.props.showPageButton,
             statusMessage: this.props.statusMessage
         };
         this.firstPageClickAction = this.firstPageClickAction.bind(this);

@@ -63,10 +63,10 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
             buttonNode.style.display = "none";
         }
         if (this.props.hideUnusedPaging === true) {
-            this.setState({ hidePageButton: true });
+            this.setState({ showPageButton: true });
 
         }else {
-            this.setState({ hidePageButton: false });
+            this.setState({ showPageButton: false });
         }
     }
 }

@@ -12,7 +12,7 @@ styling.
 
 ## Features
 * Show pages for items
-* Supports last and first page buttons.
+* Hide un used buttons.
 
 ## Dependencies
 Mendix 7.6

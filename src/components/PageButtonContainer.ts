@@ -27,7 +27,7 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
 
         this.state = {
             findingListviewWidget: true,
-            hidePageButton: false,
+            showPageButton: true,
             statusMessage: ""
         };
         this.updateListView = this.updateListView.bind(this);
@@ -63,8 +63,8 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
     private renderPageButton(): ReactElement<PageButtonProps> | null {
         if (this.state.validationPassed) {
             return createElement(PageButton, {
-                hidePageButton: this.state.hidePageButton,
                 onClickAction: this.updateListView,
+                showPageButton: this.state.showPageButton,
                 statusMessage: this.state.statusMessage
             });
         }
