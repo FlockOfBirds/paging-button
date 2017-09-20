@@ -6,7 +6,7 @@
 
 # PAGE BUTTON
 
-Add boostrap like paging to your list view.
+Add bootstrap like paging to your list view.
 It supports paging similar to the built-in data grid with some boot strap
 styling.
 
