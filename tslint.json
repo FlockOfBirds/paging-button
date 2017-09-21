@@ -90,8 +90,7 @@
       true,
       "dijit/registry",
       "dojo/_base/lang",
-      "dojo/_base/connect",
-      "dojo/aspect"
+      "dojo/_base/connect"
     ],
     "no-extra-semi": true,
     "no-irregular-whitespace": true,

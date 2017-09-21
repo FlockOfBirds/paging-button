@@ -4,7 +4,6 @@ import * as dijitRegistry from "dijit/registry";
 import * as classNames from "classnames";
 import * as dojoLang from "dojo/_base/lang";
 import * as dojoConnect from "dojo/_base/connect";
-import * as dojoAspect from "dojo/aspect";
 
 import { PageButton, PageButtonProps } from "./PageButton";
 import { ValidateConfigs } from "./ValidateConfigs";
@@ -108,28 +107,17 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
         if (buttonNode) {
             buttonNode.style.display = "none";
         }
-        dojoAspect.after(listView, "_renderData", () => {
-            // TODO getting status message causes the widget to load all the records.
-            // TODO if there is no work around then we have to implement message in PageButton
-            // this.setState({ listViewMessageStatus: listView._datasource.getStatusMessage() })
-        });
     }
 
     private updateListView(offSet: number) {
-        if (this.state.targetListView && this.state.targetNode
-            && this.state.targetListView._datasource
-            && this.state.validationPassed) {
-            const targetNode = this.state.targetNode;
+        const { targetListView, targetNode, validationPassed } = this.state;
+
+        if (targetListView && targetNode && validationPassed) {
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
             listNode.innerHTML = "";
-
-            const listView = this.state.targetListView;
-            const dataSource = listView._datasource;
-            // dataSource.clean();
-            dataSource.setOffset(offSet);
-            // dataSource.reload();
-            listView._showLoadingIcon();
-            listView.sequence([ "_sourceReload", "_renderData" ]);
+            targetListView._datasource.setOffset(offSet);
+            targetListView._showLoadingIcon();
+            targetListView.sequence([ "_sourceReload", "_renderData" ]);
         }
     }
 }

@@ -27,7 +27,8 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
             createElement(PageButton, {
                 maxPageSize: this.state.maxPageSize,
                 offSet: this.state.offSet,
-                onClickAction: () => { return; }
+                onClickAction: () => { return; },
+                showPageButton: true
             })
         );
     }
