@@ -1,4 +1,4 @@
-import { SFC, createElement } from "react";
+import { Component, createElement } from "react";
 import * as classNames from "classnames";
 
 import { ButtonType } from "../utils/ContainerUtils";
@@ -8,16 +8,22 @@ interface MendixButtonProps {
     className?: string;
     glyphIcon: string;
     onClickAction: () => void;
+    isDisabled: boolean;
 }
 
-export const MendixButton: SFC<MendixButtonProps> = (props) =>
-    createElement("button", {
-            className: classNames(`btn mx-button mx-name-paging-${props.buttonType}`, props.className),
-            onClick: props.onClickAction
+export class MendixButton extends Component<MendixButtonProps, {}> {
+    render() {
+        return createElement("button", {
+            className: classNames(`btn mx-button mx-name-paging-${this.props.buttonType}`, this.props.className,
+                {
+                    disabled: this.props.isDisabled
+                }
+            ),
+            onClick: this.props.onClickAction
         },
-        createElement("span", {
-            className: `glyphicon glyphicon-${props.glyphIcon}`
-        })
-    );
-
-MendixButton.displayName = "MendixButton";
+            createElement("span", {
+                className: `glyphicon glyphicon-${this.props.glyphIcon}`
+            })
+        );
+    }
+}

@@ -16,3 +16,8 @@
     border-color: transparent;
     background-color: transparent;
 }
+
+.widget-page-button .page-button .disabled, .widget-page-button .page-button .disabled:focus {
+    border-color: transparent;
+    color: #999;
+}

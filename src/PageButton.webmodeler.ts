@@ -4,6 +4,7 @@ import { findDOMNode } from "react-dom";
 import { PageButton } from "./components/PageButton";
 import { ValidateConfigs } from "./components/ValidateConfigs";
 import { PageButtonContainerProps, PageButtonContainerState, WrapperProps } from "./utils/ContainerUtils";
+import PageButtonContainer from "./components/PageButtonContainer";
 
 declare function require(name: string): string;
 
@@ -28,6 +29,7 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
                 maxPageSize: this.state.maxPageSize,
                 offSet: this.state.offSet,
                 onClickAction: () => { return; },
+                setMessageStatus: PageButtonContainer.setMessageStatus,
                 showPageButton: true
             })
         );

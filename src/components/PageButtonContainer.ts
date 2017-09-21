@@ -59,12 +59,30 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
         dojoConnect.disconnect(this.navigationHandler);
     }
 
+    public static setMessageStatus(currentOffSet: number, offSet: number, maxPageSize: number): string {
+        let fromValue = currentOffSet + 1;
+        let toValue = 0;
+        if (maxPageSize === 0) {
+            fromValue = 0;
+        } else if (maxPageSize < offSet || (currentOffSet + offSet) > maxPageSize) {
+            toValue = maxPageSize;
+        } else {
+            toValue = currentOffSet + offSet;
+        }
+
+        return window.mx.ui.translate(
+            "mxui.lib.MxDataSource",
+            "status",
+            [ fromValue, toValue, maxPageSize ]);
+    }
+
     private renderPageButton(): ReactElement<PageButtonProps> | null {
         if (this.state.validationPassed) {
             return createElement(PageButton, {
                 maxPageSize: this.state.maxPageSize,
                 offSet: this.state.offSet,
                 onClickAction: this.updateListView,
+                setMessageStatus: PageButtonContainer.setMessageStatus,
                 showPageButton: this.state.showPageButton
             });
         }
@@ -120,4 +138,5 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
             targetListView.sequence([ "_sourceReload", "_renderData" ]);
         }
     }
+
 }

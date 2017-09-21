@@ -8,12 +8,15 @@ export interface PageButtonProps {
     offSet: number;
     onClickAction: (offSet: number) => void;
     showPageButton?: boolean;
+    setMessageStatus: (currentOffSet: number, offSet: number, maxPageSize: number) => string;
 }
 
 export interface PageButtonState {
     currentOffSet: number;
     isVisible?: boolean;
     statusMessage: string;
+    previousIsDisabled: boolean;
+    nextIsDisabled: boolean;
 }
 
 export class PageButton extends Component<PageButtonProps, PageButtonState> {
@@ -23,14 +26,16 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         this.state = {
             currentOffSet: 0,
             isVisible: this.props.showPageButton,
+            nextIsDisabled: false,
+            previousIsDisabled: true,
             statusMessage: ""
+
         };
         this.firstPageClickAction = this.firstPageClickAction.bind(this);
         this.lastPageClickAction = this.lastPageClickAction.bind(this);
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
         this.previousPageClickAction = this.previousPageClickAction.bind(this);
         this.callOnClickAction = this.callOnClickAction.bind(this);
-        this.setMessageStatus = this.setMessageStatus.bind(this);
     }
 
     render() {
@@ -42,11 +47,13 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
             createElement(MendixButton, {
                 buttonType: "first",
                 glyphIcon: "step-backward",
+                isDisabled: this.state.previousIsDisabled,
                 onClickAction: this.firstPageClickAction
             }),
             createElement(MendixButton, {
                 buttonType: "previous",
                 glyphIcon: "backward",
+                isDisabled: this.state.previousIsDisabled,
                 onClickAction: this.previousPageClickAction
             }),
             createElement("span", { className: "paging-status" },
@@ -55,22 +62,33 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
             createElement(MendixButton, {
                 buttonType: "next",
                 glyphIcon: "forward",
+                isDisabled: this.state.nextIsDisabled,
                 onClickAction: this.nextPageClickAction
             }),
             createElement(MendixButton, {
                 buttonType: "last",
                 glyphIcon: "step-forward",
+                isDisabled: this.state.nextIsDisabled,
                 onClickAction: this.lastPageClickAction
             })
         );
     }
 
     componentDidMount() {
-        this.setMessageStatus(this.state.currentOffSet, this.props.offSet, this.props.maxPageSize);
+        const { maxPageSize, offSet } = this.props;
+        this.setState({
+            statusMessage: this.props.setMessageStatus(this.state.currentOffSet, this.props.offSet, maxPageSize)
+        });
+
+        if (maxPageSize === 0 || offSet >= maxPageSize) {
+            this.setState({ nextIsDisabled: true });
+        }
     }
 
     componentWillReceiveProps(nextProps: PageButtonProps) {
-        this.setMessageStatus(this.state.currentOffSet, nextProps.offSet, nextProps.maxPageSize);
+        this.setState({
+            statusMessage: this.props.setMessageStatus(this.state.currentOffSet, nextProps.offSet, nextProps.maxPageSize)
+        });
     }
 
     componentDidUpdate(_prevProps: PageButtonProps, _prevState: PageButtonState) {
@@ -81,17 +99,30 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         const { maxPageSize, offSet } = this.props;
         const currentOffSet = 0;
 
-        this.setState({ currentOffSet });
-        this.setMessageStatus(currentOffSet, offSet, maxPageSize);
+        this.setState({
+            currentOffSet,
+            nextIsDisabled: false,
+            previousIsDisabled: true,
+            statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+        });
     }
 
     private nextPageClickAction() {
         const { maxPageSize, offSet } = this.props;
         const currentOffSet = this.state.currentOffSet + offSet;
 
-        if (currentOffSet < maxPageSize) {
-            this.setState({ currentOffSet });
-            this.setMessageStatus(currentOffSet, offSet, maxPageSize);
+        if ((maxPageSize - currentOffSet) <= offSet) {
+            this.setState({
+                currentOffSet,
+                nextIsDisabled: true,
+                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            });
+        } else if (currentOffSet < maxPageSize) {
+            this.setState({
+                currentOffSet,
+                previousIsDisabled: false,
+                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            });
         }
     }
 
@@ -99,9 +130,18 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         const currentOffSet = this.state.currentOffSet - this.props.offSet;
         const { offSet, maxPageSize } = this.props;
 
-        if (currentOffSet >= 0) {
-            this.setState({ currentOffSet });
-            this.setMessageStatus(currentOffSet, offSet, maxPageSize);
+        if (currentOffSet > 0) {
+            this.setState({
+                currentOffSet,
+                nextIsDisabled: false,
+                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            });
+        } else if (currentOffSet === 0) {
+            this.setState({
+                currentOffSet,
+                previousIsDisabled: true,
+                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            });
         }
     }
 
@@ -112,26 +152,13 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
          : maxPageSize - (maxPageSize % offSet);
 
         if (currentOffSet > 0) {
-            this.setState({ currentOffSet });
-            this.setMessageStatus(currentOffSet, offSet, maxPageSize);
+            this.setState({
+                currentOffSet,
+                nextIsDisabled: true,
+                previousIsDisabled: false,
+                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            });
         }
-    }
-
-    private setMessageStatus(currentOffSet: number, offSet: number, maxPageSize: number) {
-        let fromValue = currentOffSet + 1;
-        let toValue = 0;
-        if (maxPageSize === 0) {
-            fromValue = 0;
-        } else if (maxPageSize < offSet || (currentOffSet + offSet) > maxPageSize) {
-            toValue = maxPageSize;
-        } else {
-            toValue = currentOffSet + offSet;
-        }
-        const statusMessage = window.mx.ui.translate(
-            "mxui.lib.MxDataSource",
-            "status",
-            [ fromValue, toValue, maxPageSize ]);
-        this.setState({ statusMessage });
     }
 
     private callOnClickAction() {
