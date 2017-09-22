@@ -14,6 +14,7 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
         super(props);
 
         this.state = { findingListviewWidget: true, maxPageSize: 0, offSet: 1 };
+        this.transformListView = this.transformListView.bind(this);
     }
 
     render() {
@@ -53,6 +54,7 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
         }
         const validateMessage = ValidateConfigs.validate({
             ...props as WrapperProps,
+            inWebModeler: true,
             queryNode: this.state.targetNode,
             targetListview: this.state.targetListView,
             validate: !this.state.findingListviewWidget

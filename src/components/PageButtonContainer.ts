@@ -17,8 +17,8 @@ import {
 import "../ui/PageButton.css";
 
 export default class PageButtonContainer extends Component<PageButtonContainerProps, PageButtonContainerState> {
-    pageButtonClass: "custom-listview-page-button";
     private navigationHandler: object;
+    private listListViewHeight: number;
 
     constructor(props: PageButtonContainerProps) {
         super(props);
@@ -29,8 +29,10 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
             offSet: 1,
             showPageButton: true
         };
+
         this.updateListView = this.updateListView.bind(this);
         this.transformListView = this.transformListView.bind(this);
+
         this.navigationHandler = dojoConnect.connect(
             props.mxform,
             "onNavigation",
@@ -122,9 +124,12 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
             maxPageSize: listView._datasource._setSize,
             offSet: listView._datasource._pageSize
         });
+
         if (buttonNode) {
             buttonNode.style.display = "none";
         }
+
+        this.listListViewHeight = targetNode.clientHeight;
     }
 
     private updateListView(offSet: number) {
@@ -132,6 +137,8 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
 
         if (targetListView && targetNode && validationPassed) {
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+
+            listNode.style.height = `${this.listListViewHeight}px`;
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
