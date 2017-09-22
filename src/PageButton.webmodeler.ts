@@ -7,7 +7,9 @@ import { PageButtonContainerProps, PageButtonContainerState, WrapperProps } from
 import PageButtonContainer from "./components/PageButtonContainer";
 
 declare function require(name: string): string;
-
+type VisibilityMap = {
+    [ P in keyof PageButtonContainerProps ]: boolean;
+    };
 // tslint:disable-next-line class-name
 export class preview extends Component<PageButtonContainerProps, PageButtonContainerState> {
     constructor(props: PageButtonContainerProps) {
@@ -80,6 +82,12 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
             this.setState({ showPageButton: false });
         }
     }
+}
+
+export function getVisibleProperties(valueMap: PageButtonContainerProps, visibilityMap: VisibilityMap) {
+    valueMap.hideUnusedPaging = visibilityMap.hideUnusedPaging = false;
+
+    return visibilityMap;
 }
 
 export function getPreviewCss() {

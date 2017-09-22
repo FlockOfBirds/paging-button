@@ -122,7 +122,8 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
 
         this.setState({
             maxPageSize: listView._datasource._setSize,
-            offSet: listView._datasource._pageSize
+            offSet: listView._datasource._pageSize,
+            showPageButton: !((listView._datasource._pageSize >= listView._datasource._setSize) && this.props.hideUnusedPaging)
         });
 
         if (buttonNode) {
