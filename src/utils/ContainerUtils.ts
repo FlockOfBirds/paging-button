@@ -23,26 +23,12 @@ export interface PaginationContainerState {
 
 export interface ListView extends mxui.widget._WidgetBase {
     _datasource: {
-        atBeginning: () => boolean;
-        atEnd: () => boolean;
-        first: () => void;
-        last: () => void;
-        next: () => void;
-        previous: () => void;
-        getStatusMessage: () => string;
-        getObjects: () => any;
-        getOffset: () => any
         setOffset: (offSet: number) => void;
         _setSize: number;
         _pageSize: number;
-        clean: () => void;
-        reload: () => void;
-        destroy: () => void;
     };
     _showLoadingIcon: () => void;
     sequence: (sequence: string[]) => void;
-    _itemList: any;
-    update: () => void;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {

@@ -38,13 +38,9 @@ export class ValidateConfigs extends Component<ValidateConfigProps, {}> {
     static isCompatible(targetListView: ListView): boolean {
         return !!(targetListView
             && targetListView._datasource
-            && targetListView._datasource.atBeginning
-            && targetListView._datasource.atEnd
-            && targetListView._datasource.first
-            && targetListView._datasource.next
-            && targetListView._datasource.previous
-            && targetListView._datasource.last
-            && targetListView._datasource.getStatusMessage
+            && targetListView._datasource.setOffset
+            && targetListView._datasource._setSize
+            && targetListView._datasource._pageSize
             && targetListView._showLoadingIcon
             && targetListView.sequence);
     }
