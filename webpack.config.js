@@ -9,7 +9,7 @@ const widgetConfig = {
     entry: `./src/components/${widgetName}Container.ts`,
     output: {
         path: path.resolve(__dirname, "dist/tmp"),
-        filename: `src/com/mendix/widget/custom/pagebutton/${widgetName}.js`,
+        filename: `src/com/mendix/widget/custom/pagination/${widgetName}.js`,
         libraryTarget: "umd"
     },
     resolve: {
@@ -33,7 +33,7 @@ const widgetConfig = {
         new CopyWebpackPlugin([
             { from: "src/**/*.xml" },
         ], { copyUnmodified: true }),
-        new ExtractTextPlugin({ filename: `./src/com/mendix/widget/custom/pagebutton/ui/${widgetName}.css` }),
+        new ExtractTextPlugin({ filename: `./src/com/mendix/widget/custom/pagination/ui/${widgetName}.css` }),
         new webpack.LoaderOptionsPlugin({ debug: true })
     ]
 };

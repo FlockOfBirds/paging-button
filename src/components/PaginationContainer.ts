@@ -5,22 +5,22 @@ import * as classNames from "classnames";
 import * as dojoLang from "dojo/_base/lang";
 import * as dojoConnect from "dojo/_base/connect";
 
-import { PageButton, PageButtonProps } from "./PageButton";
+import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "./ValidateConfigs";
 import {
     ListView,
-    PageButtonContainerProps,
-    PageButtonContainerState,
+    PaginationContainerProps,
+    PaginationContainerState,
     WrapperProps,
     parseStyle
 } from "../utils/ContainerUtils";
-import "../ui/PageButton.css";
+import "../ui/Pagination.css";
 
-export default class PageButtonContainer extends Component<PageButtonContainerProps, PageButtonContainerState> {
+export default class PaginationContainer extends Component<PaginationContainerProps, PaginationContainerState> {
     private navigationHandler: object;
     private listListViewHeight: number;
 
-    constructor(props: PageButtonContainerProps) {
+    constructor(props: PaginationContainerProps) {
         super(props);
 
         this.state = {
@@ -44,7 +44,7 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
     render() {
         return createElement("div",
             {
-                className: classNames("widget-page-button", this.props.class),
+                className: classNames("widget-pagination", this.props.class),
                 style: parseStyle(this.props.style)
             },
             createElement(ValidateConfigs, {
@@ -78,13 +78,13 @@ export default class PageButtonContainer extends Component<PageButtonContainerPr
             [ fromValue, toValue, maxPageSize ]);
     }
 
-    private renderPageButton(): ReactElement<PageButtonProps> | null {
+    private renderPageButton(): ReactElement<PaginationProps> | null {
         if (this.state.validationPassed) {
-            return createElement(PageButton, {
+            return createElement(Pagination, {
                 maxPageSize: this.state.maxPageSize,
                 offSet: this.state.offSet,
                 onClickAction: this.updateListView,
-                setMessageStatus: PageButtonContainer.setMessageStatus,
+                setMessageStatus: PaginationContainer.setMessageStatus,
                 showPageButton: this.state.showPageButton
             });
         }

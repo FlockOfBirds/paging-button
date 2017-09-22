@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/mendixlabs/page-button.svg?branch=master)](https://travis-ci.org/mendixlabs/page-button)
-[![Dependency Status](https://david-dm.org/mendixlabs/page-button.svg)](https://david-dm.org/mendixlabs/page-button)
-[![Dev Dependency Status](https://david-dm.org/mendixlabs/page-button.svg#info=devDependencies)](https://david-dm.org/mendixlabs/page-button#info=devDependencies)
-[![codecov](https://codecov.io/gh/mendixlabs/page-button/branch/master/graph/page-button.svg)](https://codecov.io/gh/mendixlabs/page-button)
+[![Build Status](https://travis-ci.org/mendixlabs/pagination.svg?branch=master)](https://travis-ci.org/mendixlabs/pagination)
+[![Dependency Status](https://david-dm.org/mendixlabs/pagination.svg)](https://david-dm.org/mendixlabs/pagination)
+[![Dev Dependency Status](https://david-dm.org/mendixlabs/pagination.svg#info=devDependencies)](https://david-dm.org/mendixlabs/pagination#info=devDependencies)
+[![codecov](https://codecov.io/gh/mendixlabs/pagination/branch/master/graph/pagination.svg)](https://codecov.io/gh/mendixlabs/pagination)
 ![badge](https://img.shields.io/badge/mendix-7.6.0-green.svg)
 
-# PAGE BUTTON
+# PAGINATION
 
 Add bootstrap like paging to your list view.
 It supports paging similar to the built-in data grid with some boot strap

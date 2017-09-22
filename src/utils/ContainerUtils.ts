@@ -1,6 +1,6 @@
 export type ButtonType = "first" | "next" | "previous" | "last";
 
-export interface PageButtonContainerProps extends WrapperProps {
+export interface PaginationContainerProps extends WrapperProps {
     hideUnusedPaging?: boolean;
 }
 
@@ -11,7 +11,7 @@ export interface WrapperProps {
     style: string;
 }
 
-export interface PageButtonContainerState {
+export interface PaginationContainerState {
     findingListviewWidget: boolean;
     maxPageSize: number;
     offSet: number;

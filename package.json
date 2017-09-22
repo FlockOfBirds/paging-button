@@ -1,6 +1,6 @@
 {
-  "name": "page-button",
-  "widgetName": "PageButton",
+  "name": "pagination",
+  "widgetName": "Pagination",
   "version": "1.0.0",
   "description": "Page Mendix list views using bootstrap like pagings",
   "copyright": "Mendix BV",

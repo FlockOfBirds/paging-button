@@ -1,18 +1,18 @@
 import { Component, createElement } from "react";
 import { findDOMNode } from "react-dom";
 
-import { PageButton } from "./components/PageButton";
+import { Pagination } from "./components/Pagination";
 import { ValidateConfigs } from "./components/ValidateConfigs";
-import { PageButtonContainerProps, PageButtonContainerState, WrapperProps } from "./utils/ContainerUtils";
-import PageButtonContainer from "./components/PageButtonContainer";
+import { PaginationContainerProps, PaginationContainerState, WrapperProps } from "./utils/ContainerUtils";
+import PageButtonContainer from "./components/PaginationContainer";
 
 declare function require(name: string): string;
 type VisibilityMap = {
-    [ P in keyof PageButtonContainerProps ]: boolean;
+    [ P in keyof PaginationContainerProps ]: boolean;
     };
 // tslint:disable-next-line class-name
-export class preview extends Component<PageButtonContainerProps, PageButtonContainerState> {
-    constructor(props: PageButtonContainerProps) {
+export class preview extends Component<PaginationContainerProps, PaginationContainerState> {
+    constructor(props: PaginationContainerProps) {
         super(props);
 
         this.state = { findingListviewWidget: true, maxPageSize: 0, offSet: 1 };
@@ -28,7 +28,7 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
                 targetListview: this.state.targetListView,
                 validate: !this.state.findingListviewWidget
             }),
-            createElement(PageButton, {
+            createElement(Pagination, {
                 maxPageSize: this.state.maxPageSize,
                 offSet: this.state.offSet,
                 onClickAction: () => { return; },
@@ -84,12 +84,12 @@ export class preview extends Component<PageButtonContainerProps, PageButtonConta
     }
 }
 
-export function getVisibleProperties(valueMap: PageButtonContainerProps, visibilityMap: VisibilityMap) {
+export function getVisibleProperties(valueMap: PaginationContainerProps, visibilityMap: VisibilityMap) {
     valueMap.hideUnusedPaging = visibilityMap.hideUnusedPaging = false;
 
     return visibilityMap;
 }
 
 export function getPreviewCss() {
-    return require("./ui/PageButton.css");
+    return require("./ui/Pagination.css");
 }

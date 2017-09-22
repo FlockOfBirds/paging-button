@@ -3,7 +3,7 @@ import * as classNames from "classnames";
 
 import { MendixButton } from "./MendixButton";
 
-export interface PageButtonProps {
+export interface PaginationProps {
     maxPageSize: number;
     offSet: number;
     onClickAction: (offSet: number) => void;
@@ -11,7 +11,7 @@ export interface PageButtonProps {
     setMessageStatus: (currentOffSet: number, offSet: number, maxPageSize: number) => string;
 }
 
-export interface PageButtonState {
+interface PaginationState {
     currentOffSet: number;
     isVisible?: boolean;
     statusMessage: string;
@@ -19,8 +19,8 @@ export interface PageButtonState {
     nextIsDisabled: boolean;
 }
 
-export class PageButton extends Component<PageButtonProps, PageButtonState> {
-    constructor(props: PageButtonProps) {
+export class Pagination extends Component<PaginationProps, PaginationState> {
+    constructor(props: PaginationProps) {
         super(props);
 
         this.state = {
@@ -31,6 +31,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
             statusMessage: ""
 
         };
+
         this.firstPageClickAction = this.firstPageClickAction.bind(this);
         this.lastPageClickAction = this.lastPageClickAction.bind(this);
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
@@ -76,6 +77,7 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
 
     componentDidMount() {
         const { maxPageSize, offSet } = this.props;
+
         this.setState({
             statusMessage: this.props.setMessageStatus(this.state.currentOffSet, this.props.offSet, maxPageSize)
         });
@@ -85,13 +87,13 @@ export class PageButton extends Component<PageButtonProps, PageButtonState> {
         }
     }
 
-    componentWillReceiveProps(nextProps: PageButtonProps) {
+    componentWillReceiveProps(nextProps: PaginationProps) {
         this.setState({
             statusMessage: this.props.setMessageStatus(this.state.currentOffSet, nextProps.offSet, nextProps.maxPageSize)
         });
     }
 
-    componentDidUpdate(_prevProps: PageButtonProps, _prevState: PageButtonState) {
+    componentDidUpdate(_prevProps: PaginationProps, _prevState: PaginationState) {
         this.callOnClickAction();
     }
 

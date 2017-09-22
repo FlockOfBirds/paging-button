@@ -1,4 +1,4 @@
-describe("PageButton", () => {
+describe("Pagination", () => {
 
     it("renders the structure correctly", () => {
       //
