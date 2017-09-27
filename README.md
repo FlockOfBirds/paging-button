@@ -11,8 +11,13 @@ It supports paging similar to the built-in data grid with some boot strap
 styling.
 
 ## Features
-* Show pages for items
-* Hide un used buttons.
+* Add pagination navigation buttons to the list view 
+ie:
+  * First button
+  * Last button
+  * Next button
+  * Previous button
+* Hide unused buttons.
 
 ## Dependencies
 Mendix 7.6
@@ -33,8 +38,7 @@ Mendix 7.6
  For example when the records are few
 
 ## Issues, suggestions and feature requests
-Please report issues at [https://github.com/mendixlabs/page-button/issues](https://github.com/mendixlabs/page-button/issues).
-
+Please report issues at [https://github.com/mendixlabs/pagination/issues](https://github.com/mendixlabs/pagination/issues).
 
 ## Development and contribution
 Please follow [development guide](/development.md).

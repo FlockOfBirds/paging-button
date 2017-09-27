@@ -4,15 +4,15 @@ import * as classNames from "classnames";
 import { MendixButton } from "./MendixButton";
 
 export interface PaginationProps {
+    hideUnusedPaging: boolean;
     maxPageSize: number;
-    offSet: number;
-    onClickAction: (offSet: number) => void;
-    showPageButton?: boolean;
-    setMessageStatus: (currentOffSet: number, offSet: number, maxPageSize: number) => string;
+    offset: number;
+    onClickAction: (offset: number) => void;
+    setMessageStatus: (currentOffset: number, offset: number, maxPageSize: number) => string;
 }
 
 interface PaginationState {
-    currentOffSet: number;
+    currentOffset: number;
     isVisible?: boolean;
     statusMessage: string;
     previousIsDisabled: boolean;
@@ -24,8 +24,8 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         super(props);
 
         this.state = {
-            currentOffSet: 0,
-            isVisible: this.props.showPageButton,
+            currentOffset: 0,
+            isVisible: !this.props.hideUnusedPaging,
             nextIsDisabled: false,
             previousIsDisabled: true,
             statusMessage: ""
@@ -36,134 +36,125 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.lastPageClickAction = this.lastPageClickAction.bind(this);
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
         this.previousPageClickAction = this.previousPageClickAction.bind(this);
-        this.callOnClickAction = this.callOnClickAction.bind(this);
     }
 
     render() {
-        return createElement("div", {
-                className: classNames("page-button",
-                    `visible: ${this.state.isVisible ? "visible" : "hidden"}`
-                )
-            },
-            createElement(MendixButton, {
-                buttonType: "first",
-                glyphIcon: "step-backward",
-                isDisabled: this.state.previousIsDisabled,
-                onClickAction: this.firstPageClickAction
-            }),
-            createElement(MendixButton, {
-                buttonType: "previous",
-                glyphIcon: "backward",
-                isDisabled: this.state.previousIsDisabled,
-                onClickAction: this.previousPageClickAction
-            }),
-            createElement("span", { className: "paging-status" },
-                this.state.statusMessage
-            ),
-            createElement(MendixButton, {
-                buttonType: "next",
-                glyphIcon: "forward",
-                isDisabled: this.state.nextIsDisabled,
-                onClickAction: this.nextPageClickAction
-            }),
-            createElement(MendixButton, {
-                buttonType: "last",
-                glyphIcon: "step-forward",
-                isDisabled: this.state.nextIsDisabled,
-                onClickAction: this.lastPageClickAction
-            })
+        return createElement("div",
+            { className: classNames("pagination", `${this.state.isVisible ? "visible" : "hidden"}`) },
+            this.createFirstButton(),
+            this.createPreviousButton(),
+            createElement("span", { className: "paging-status" }, this.state.statusMessage),
+            this.createNextButton(),
+            this.createLastButton()
         );
     }
 
     componentDidMount() {
-        const { maxPageSize, offSet } = this.props;
+        const { maxPageSize, offset } = this.props;
 
         this.setState({
-            statusMessage: this.props.setMessageStatus(this.state.currentOffSet, this.props.offSet, maxPageSize)
+            statusMessage: this.props.setMessageStatus(this.state.currentOffset, offset, maxPageSize)
         });
 
-        if (maxPageSize === 0 || offSet >= maxPageSize) {
+        if (maxPageSize === 0 || offset >= maxPageSize) {
             this.setState({ nextIsDisabled: true });
         }
     }
 
     componentWillReceiveProps(nextProps: PaginationProps) {
         this.setState({
-            statusMessage: this.props.setMessageStatus(this.state.currentOffSet, nextProps.offSet, nextProps.maxPageSize)
+            statusMessage: this.props.setMessageStatus(this.state.currentOffset, nextProps.offset, nextProps.maxPageSize)
         });
     }
 
-    componentDidUpdate(_prevProps: PaginationProps, _prevState: PaginationState) {
-        this.callOnClickAction();
+    private createLastButton() {
+        return createElement(MendixButton, {
+            buttonType: "last",
+            glyphIcon: "step-forward",
+            isDisabled: this.state.nextIsDisabled,
+            onClickAction: this.lastPageClickAction
+        });
+    }
+
+    private createNextButton() {
+        return createElement(MendixButton, {
+            buttonType: "next",
+            glyphIcon: "forward",
+            isDisabled: this.state.nextIsDisabled,
+            onClickAction: this.nextPageClickAction
+        });
+    }
+
+    private createPreviousButton() {
+        return createElement(MendixButton, {
+            buttonType: "previous",
+            glyphIcon: "backward",
+            isDisabled: this.state.previousIsDisabled,
+            onClickAction: this.previousPageClickAction
+        });
+    }
+
+    private createFirstButton() {
+        return createElement(MendixButton, {
+            buttonType: "first",
+            glyphIcon: "step-backward",
+            isDisabled: this.state.previousIsDisabled,
+            onClickAction: this.firstPageClickAction
+        });
     }
 
     private firstPageClickAction() {
-        const { maxPageSize, offSet } = this.props;
-        const currentOffSet = 0;
+        const currentOffset = 0;
 
         this.setState({
-            currentOffSet,
+            currentOffset,
             nextIsDisabled: false,
             previousIsDisabled: true,
-            statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+            statusMessage: this.props.setMessageStatus(currentOffset, this.props.offset, this.props.maxPageSize)
         });
+        this.props.onClickAction(currentOffset);
     }
 
     private nextPageClickAction() {
-        const { maxPageSize, offSet } = this.props;
-        const currentOffSet = this.state.currentOffSet + offSet;
+        const { maxPageSize, offset } = this.props;
+        const currentOffset = this.state.currentOffset + offset;
 
-        if ((maxPageSize - currentOffSet) <= offSet) {
-            this.setState({
-                currentOffSet,
-                nextIsDisabled: true,
-                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
-            });
-        } else if (currentOffSet < maxPageSize) {
-            this.setState({
-                currentOffSet,
-                previousIsDisabled: false,
-                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
-            });
-        }
+        this.setState({
+            currentOffset,
+            nextIsDisabled: (maxPageSize - currentOffset) <= offset,
+            previousIsDisabled: currentOffset > maxPageSize,
+            statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+        });
+        this.props.onClickAction(currentOffset);
     }
 
     private previousPageClickAction() {
-        const currentOffSet = this.state.currentOffSet - this.props.offSet;
-        const { offSet, maxPageSize } = this.props;
+        const currentOffset = this.state.currentOffset - this.props.offset;
+        const { offset, maxPageSize } = this.props;
 
-        if (currentOffSet > 0) {
-            this.setState({
-                currentOffSet,
-                nextIsDisabled: false,
-                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
-            });
-        } else if (currentOffSet === 0) {
-            this.setState({
-                currentOffSet,
-                previousIsDisabled: true,
-                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
-            });
-        }
+        this.setState({
+            currentOffset,
+            nextIsDisabled: currentOffset > 0,
+            previousIsDisabled: currentOffset === 0,
+            statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+        });
+        this.props.onClickAction(currentOffset);
     }
 
     private lastPageClickAction() {
-        const { offSet, maxPageSize } = this.props;
-        const currentOffSet = (maxPageSize % offSet) === 0
-         ? maxPageSize - offSet
-         : maxPageSize - (maxPageSize % offSet);
+        const { offset, maxPageSize } = this.props;
+        const currentOffset = (maxPageSize % offset) === 0
+            ? maxPageSize - offset
+            : maxPageSize - (maxPageSize % offset);
 
-        if (currentOffSet > 0) {
+        if (currentOffset > 0) {
             this.setState({
-                currentOffSet,
+                currentOffset,
                 nextIsDisabled: true,
                 previousIsDisabled: false,
-                statusMessage: this.props.setMessageStatus(currentOffSet, offSet, maxPageSize)
+                statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
             });
         }
-    }
-
-    private callOnClickAction() {
-        this.props.onClickAction(this.state.currentOffSet);
+        this.props.onClickAction(currentOffset);
     }
 }

@@ -1,9 +1,9 @@
 import { Component, createElement } from "react";
 import * as classNames from "classnames";
 
-import { ButtonType } from "../utils/ContainerUtils";
+type ButtonType = "first" | "next" | "previous" | "last";
 
-interface MendixButtonProps {
+export interface MendixButtonProps {
     buttonType: ButtonType;
     className?: string;
     glyphIcon: string;
@@ -15,9 +15,7 @@ export class MendixButton extends Component<MendixButtonProps, {}> {
     render() {
         return createElement("button", {
             className: classNames(`btn mx-button mx-name-paging-${this.props.buttonType}`, this.props.className,
-                {
-                    disabled: this.props.isDisabled
-                }
+                { disabled: this.props.isDisabled }
             ),
             onClick: this.props.onClickAction
         },

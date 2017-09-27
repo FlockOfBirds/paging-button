@@ -2,19 +2,32 @@ import { Component, ReactElement, createElement } from "react";
 import { findDOMNode } from "react-dom";
 import * as dijitRegistry from "dijit/registry";
 import * as classNames from "classnames";
-import * as dojoLang from "dojo/_base/lang";
 import * as dojoConnect from "dojo/_base/connect";
 
+import { ListView, PaginationContainerProps, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
 import { Pagination, PaginationProps } from "./Pagination";
-import { ValidateConfigs } from "./ValidateConfigs";
-import {
-    ListView,
-    PaginationContainerProps,
-    PaginationContainerState,
-    WrapperProps,
-    parseStyle
-} from "../utils/ContainerUtils";
+import { ValidateConfigs } from "../utils/ValidateConfigs";
+import { Alert } from "./Alert";
 import "../ui/Pagination.css";
+
+interface PaginationContainerState {
+    findingListViewWidget: boolean;
+    maxPageSize: number;
+    message: string;
+    offset: number;
+    hideUnusedPaging: boolean;
+    targetListView?: ListView | null;
+    targetNode?: HTMLElement | null;
+    validationPassed?: boolean;
+}
+
+interface ValidateProps {
+    maxPageSize: number;
+    offset: number;
+    hideUnusedPaging: boolean;
+    targetListView?: ListView | null;
+    targetNode?: HTMLElement | null;
+}
 
 export default class PaginationContainer extends Component<PaginationContainerProps, PaginationContainerState> {
     private navigationHandler: object;
@@ -24,21 +37,33 @@ export default class PaginationContainer extends Component<PaginationContainerPr
         super(props);
 
         this.state = {
-            findingListviewWidget: true,
+            findingListViewWidget: true,
+            hideUnusedPaging: false,
             maxPageSize: 0,
-            offSet: 1,
-            showPageButton: true
+            message: "",
+            offset: 1
         };
 
         this.updateListView = this.updateListView.bind(this);
-        this.transformListView = this.transformListView.bind(this);
+        // this.onFinishValidation = this.onFinishValidation.bind(this);
+        this.findListView = this.findListView.bind(this);
 
-        this.navigationHandler = dojoConnect.connect(
-            props.mxform,
-            "onNavigation",
-            this,
-            dojoLang.hitch(this, this.validateConfigs)
-        );
+        this.navigationHandler = dojoConnect.connect(props.mxform, "onNavigation", this , this.findListView);
+    }
+
+    public static setMessageStatus(currentOffset: number, offset: number, maxPageSize: number): string {
+        let fromValue = currentOffset + 1;
+        let toValue = 0;
+
+        if (maxPageSize === 0) {
+            fromValue = 0;
+        } else if (maxPageSize < offset || (currentOffset + offset) > maxPageSize) {
+            toValue = maxPageSize;
+        } else {
+            toValue = currentOffset + offset;
+        }
+
+        return window.mx.ui.translate("mxui.lib.MxDataSource", "status", [ fromValue, toValue, maxPageSize ]);
     }
 
     render() {
@@ -47,11 +72,9 @@ export default class PaginationContainer extends Component<PaginationContainerPr
                 className: classNames("widget-pagination", this.props.class),
                 style: parseStyle(this.props.style)
             },
-            createElement(ValidateConfigs, {
-                ...this.props as WrapperProps,
-                queryNode: this.state.targetNode,
-                targetListview: this.state.targetListView,
-                validate: !this.state.findingListviewWidget
+            createElement(Alert, {
+                className: "widget-pagination-alert",
+                message: this.state.message
             }),
             this.renderPageButton()
         );
@@ -61,73 +84,69 @@ export default class PaginationContainer extends Component<PaginationContainerPr
         dojoConnect.disconnect(this.navigationHandler);
     }
 
-    public static setMessageStatus(currentOffSet: number, offSet: number, maxPageSize: number): string {
-        let fromValue = currentOffSet + 1;
-        let toValue = 0;
-        if (maxPageSize === 0) {
-            fromValue = 0;
-        } else if (maxPageSize < offSet || (currentOffSet + offSet) > maxPageSize) {
-            toValue = maxPageSize;
-        } else {
-            toValue = currentOffSet + offSet;
-        }
-
-        return window.mx.ui.translate(
-            "mxui.lib.MxDataSource",
-            "status",
-            [ fromValue, toValue, maxPageSize ]);
-    }
-
     private renderPageButton(): ReactElement<PaginationProps> | null {
         if (this.state.validationPassed) {
             return createElement(Pagination, {
+                hideUnusedPaging: this.state.hideUnusedPaging,
                 maxPageSize: this.state.maxPageSize,
-                offSet: this.state.offSet,
+                offset: this.state.offset,
                 onClickAction: this.updateListView,
-                setMessageStatus: PaginationContainer.setMessageStatus,
-                showPageButton: this.state.showPageButton
+                setMessageStatus: PaginationContainer.setMessageStatus
             });
         }
 
         return null;
     }
 
-    private validateConfigs() {
-        if (!this.state.validationPassed) {
+    private findListView() {
+        if (this.state.findingListViewWidget) {
             const queryNode = findDOMNode(this) as HTMLElement;
-            const targetNode = ValidateConfigs.findTargetNode(queryNode);
+            const targetNode = findTargetNode(queryNode);
+            let hideUnusedPaging = false;
             let targetListView: ListView | null = null;
+            let maxPageSize = 0;
+            let offset = 0;
 
             if (targetNode) {
+                this.hideLoadMoreButton(targetNode);
                 targetListView = dijitRegistry.byNode(targetNode);
-                this.setState({ targetNode });
-
                 if (targetListView) {
-                    this.transformListView(targetNode, targetListView);
-                    this.setState({ targetListView });
+                    const dataSource = targetListView._datasource;
+                    maxPageSize = dataSource._setSize;
+                    offset = targetListView._datasource._pageSize;
+                    if ((offset >= dataSource._setSize) && this.props.hideUnusedPaging) {
+                        hideUnusedPaging = true;
+                    }
                 }
             }
-            const validateMessage = ValidateConfigs.validate({
-                ...this.props as WrapperProps,
-                queryNode: this.state.targetNode,
-                targetListview: this.state.targetListView,
-                validate: !this.state.findingListviewWidget
-            });
-            this.setState({ findingListviewWidget: false, validationPassed: !validateMessage });
+            this.validateListView({ targetNode, targetListView, hideUnusedPaging, maxPageSize, offset });
         }
     }
 
-    private transformListView(targetNode: HTMLElement, listView: ListView) {
-        const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
-
-        this.setState({
-            maxPageSize: listView._datasource._setSize,
-            offSet: listView._datasource._pageSize,
-            showPageButton: !((listView._datasource._pageSize >= listView._datasource._setSize) && this.props.hideUnusedPaging)
+    private validateListView(props: ValidateProps) {
+        const message = ValidateConfigs.validate({
+            ...this.props as WrapperProps,
+            queryNode: props.targetNode,
+            targetListView: props.targetListView
         });
 
+        this.setState({
+            findingListViewWidget: false,
+            hideUnusedPaging: props.hideUnusedPaging,
+            maxPageSize: props.maxPageSize,
+            message,
+            offset: props.offset,
+            targetListView: props.targetListView,
+            targetNode: props.targetNode,
+            validationPassed: message === ""
+        });
+    }
+
+    private hideLoadMoreButton(targetNode: HTMLElement) {
+        const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+
         if (buttonNode) {
-            buttonNode.style.display = "none";
+            buttonNode.classList.add("widget-pagination-hide-load-more");
         }
 
         this.listListViewHeight = targetNode.clientHeight;
@@ -143,8 +162,7 @@ export default class PaginationContainer extends Component<PaginationContainerPr
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
-            targetListView.sequence([ "_sourceReload", "_renderData" ]);
+            targetListView.update();
         }
     }
-
 }

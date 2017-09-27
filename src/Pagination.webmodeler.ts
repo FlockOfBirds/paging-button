@@ -1,39 +1,47 @@
 import { Component, createElement } from "react";
 import { findDOMNode } from "react-dom";
 
+import { PaginationContainerProps, WrapperProps, findTargetNode } from "./utils/ContainerUtils";
 import { Pagination } from "./components/Pagination";
-import { ValidateConfigs } from "./components/ValidateConfigs";
-import { PaginationContainerProps, PaginationContainerState, WrapperProps } from "./utils/ContainerUtils";
-import PageButtonContainer from "./components/PaginationContainer";
+import { ValidateConfigs } from "./utils/ValidateConfigs";
+import { Alert } from "./components/Alert";
 
-declare function require(name: string): string;
 type VisibilityMap = {
     [ P in keyof PaginationContainerProps ]: boolean;
-    };
+};
+
+interface PaginationWebModelerState {
+    findingListViewWidget: boolean;
+    hideUnusedPaging: boolean;
+    message: string;
+}
 // tslint:disable-next-line class-name
-export class preview extends Component<PaginationContainerProps, PaginationContainerState> {
+export class preview extends Component<PaginationContainerProps, PaginationWebModelerState> {
+
     constructor(props: PaginationContainerProps) {
         super(props);
 
-        this.state = { findingListviewWidget: true, maxPageSize: 0, offSet: 1 };
-        this.transformListView = this.transformListView.bind(this);
+        this.state = {
+            findingListViewWidget: true,
+            hideUnusedPaging: this.props.hideUnusedPaging,
+            message: ""
+        };
     }
 
     render() {
-        return createElement("div", { className: "widget-page-button" },
-            createElement(ValidateConfigs, {
-                ...this.props as WrapperProps,
-                inWebModeler: true,
-                queryNode: this.state.targetNode,
-                targetListview: this.state.targetListView,
-                validate: !this.state.findingListviewWidget
+        return createElement("div", { className: "widget-pagination" },
+            createElement(Alert, {
+                className: "widget-pagination-alert",
+                message: this.state.message
             }),
             createElement(Pagination, {
-                maxPageSize: this.state.maxPageSize,
-                offSet: this.state.offSet,
-                onClickAction: () => { return; },
-                setMessageStatus: PageButtonContainer.setMessageStatus,
-                showPageButton: true
+                hideUnusedPaging: false,
+                maxPageSize: 10,
+                offset: 2,
+                onClickAction: () => {
+                    return;
+                },
+                setMessageStatus: () => "[2 to 10 of 50]"
             })
         );
     }
@@ -42,44 +50,35 @@ export class preview extends Component<PaginationContainerProps, PaginationConta
         this.validateConfigs(this.props);
     }
 
-    componentWillReceiveProps(newProps: WrapperProps) {
-        this.validateConfigs(newProps);
+    componentWillReceiveProps(nextProps: PaginationContainerProps) {
+        this.validateConfigs(nextProps);
     }
 
-    private validateConfigs(props: WrapperProps) {
+    private validateConfigs(props: PaginationContainerProps) {
         const queryNode = findDOMNode(this) as HTMLElement;
-        const targetNode = ValidateConfigs.findTargetNode(queryNode);
-
-        if (targetNode) {
-            this.transformListView(targetNode);
-            this.setState({ targetNode });
-        }
-        const validateMessage = ValidateConfigs.validate({
+        const targetNode = findTargetNode(queryNode);
+        const message = ValidateConfigs.validate({
             ...props as WrapperProps,
             inWebModeler: true,
-            queryNode: this.state.targetNode,
-            targetListview: this.state.targetListView,
-            validate: !this.state.findingListviewWidget
+            queryNode: targetNode
         });
+
+        this.hideLoadMoreButton(targetNode);
+
         this.setState({
-            findingListviewWidget: false,
-            maxPageSize: 10,
-            offSet: 1,
-            validationPassed: !validateMessage
+            findingListViewWidget: false,
+            hideUnusedPaging: props.hideUnusedPaging,
+            message
         });
     }
 
-    private transformListView(targetNode: HTMLElement) {
-        const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+    private hideLoadMoreButton(targetNode: HTMLElement | null) {
+        if (targetNode) {
+            const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
 
-        if (buttonNode) {
-            buttonNode.style.display = "none";
-        }
-        if (this.props.hideUnusedPaging === true) {
-            this.setState({ showPageButton: true });
-
-        }else {
-            this.setState({ showPageButton: false });
+            if (buttonNode) {
+                buttonNode.style.display = "none";
+            }
         }
     }
 }

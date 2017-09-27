@@ -89,7 +89,6 @@
     "no-submodule-imports": [
       true,
       "dijit/registry",
-      "dojo/_base/lang",
       "dojo/_base/connect"
     ],
     "no-extra-semi": true,

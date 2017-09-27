@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget id="com.mendix.widget.custom.pagination.Pagination" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
     <name>Pagination</name>
-    <description>Add bootstrap like paging to your list view</description>
+    <description>Add paging to a list view</description>
     <icon></icon>
     <properties>
         <property key="hideUnusedPaging" type="boolean" defaultValue="false">

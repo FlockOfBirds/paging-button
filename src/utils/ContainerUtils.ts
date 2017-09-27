@@ -1,7 +1,5 @@
-export type ButtonType = "first" | "next" | "previous" | "last";
-
 export interface PaginationContainerProps extends WrapperProps {
-    hideUnusedPaging?: boolean;
+    hideUnusedPaging: boolean;
 }
 
 export interface WrapperProps {
@@ -11,16 +9,6 @@ export interface WrapperProps {
     style: string;
 }
 
-export interface PaginationContainerState {
-    findingListviewWidget: boolean;
-    maxPageSize: number;
-    offSet: number;
-    showPageButton?: boolean;
-    targetListView?: ListView;
-    targetNode?: HTMLElement;
-    validationPassed?: boolean;
-}
-
 export interface ListView extends mxui.widget._WidgetBase {
     _datasource: {
         setOffset: (offSet: number) => void;
@@ -28,7 +16,7 @@ export interface ListView extends mxui.widget._WidgetBase {
         _pageSize: number;
     };
     _showLoadingIcon: () => void;
-    sequence: (sequence: string[]) => void;
+    update: () => void;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {
@@ -47,4 +35,19 @@ export const parseStyle = (style = ""): { [key: string]: string } => {
     }
 
     return {};
+};
+
+export const findTargetNode = (queryNode: HTMLElement): HTMLElement | null => {
+    let targetNode: HTMLElement | null = null;
+
+    while (!targetNode && queryNode) {
+        targetNode = queryNode.querySelectorAll(`.mx-listview`)[0] as HTMLElement;
+
+        if (targetNode) {
+            break;
+        }
+        queryNode = queryNode.parentNode as HTMLElement;
+    }
+
+    return targetNode;
 };
