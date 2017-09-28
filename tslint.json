@@ -89,7 +89,8 @@
     "no-submodule-imports": [
       true,
       "dijit/registry",
-      "dojo/_base/connect"
+      "dojo/_base/connect",
+      "dojo/aspect"
     ],
     "no-extra-semi": true,
     "no-irregular-whitespace": true,

@@ -3,6 +3,7 @@ import { findDOMNode } from "react-dom";
 import * as dijitRegistry from "dijit/registry";
 import * as classNames from "classnames";
 import * as dojoConnect from "dojo/_base/connect";
+import * as dojoAspect from "dojo/aspect";
 
 import { ListView, PaginationContainerProps, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
 import { Pagination, PaginationProps } from "./Pagination";
@@ -45,9 +46,7 @@ export default class PaginationContainer extends Component<PaginationContainerPr
         };
 
         this.updateListView = this.updateListView.bind(this);
-        // this.onFinishValidation = this.onFinishValidation.bind(this);
         this.findListView = this.findListView.bind(this);
-
         this.navigationHandler = dojoConnect.connect(props.mxform, "onNavigation", this , this.findListView);
     }
 
@@ -114,11 +113,16 @@ export default class PaginationContainer extends Component<PaginationContainerPr
                     const dataSource = targetListView._datasource;
                     maxPageSize = dataSource._setSize;
                     offset = targetListView._datasource._pageSize;
-                    if ((offset >= dataSource._setSize) && this.props.hideUnusedPaging) {
-                        hideUnusedPaging = true;
-                    }
+                    hideUnusedPaging = (offset >= dataSource._setSize) && this.props.hideUnusedPaging;
+
+                    dojoAspect.after(targetListView, "_onLoad", () => {
+                        if (this.state.targetListView) {
+                            this.setState({ maxPageSize: this.state.targetListView._datasource._setSize });
+                        }
+                    });
                 }
             }
+
             this.validateListView({ targetNode, targetListView, hideUnusedPaging, maxPageSize, offset });
         }
     }
