@@ -16,7 +16,7 @@ export interface ListView extends mxui.widget._WidgetBase {
         _pageSize: number;
     };
     _showLoadingIcon: () => void;
-    update: () => void;
+    sequence: (sequence: string[]) => void;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {

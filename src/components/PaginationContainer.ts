@@ -167,7 +167,7 @@ export default class PaginationContainer extends Component<PaginationContainerPr
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
-            targetListView.update();
+            targetListView.sequence([ "_sourceReload", "_renderData" ]);
         }
     }
 }
