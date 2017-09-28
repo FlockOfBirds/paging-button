@@ -109,6 +109,7 @@ export default class PaginationContainer extends Component<PaginationContainerPr
             if (targetNode) {
                 this.hideLoadMoreButton(targetNode);
                 targetListView = dijitRegistry.byNode(targetNode);
+
                 if (targetListView) {
                     const dataSource = targetListView._datasource;
                     maxPageSize = dataSource._setSize;
