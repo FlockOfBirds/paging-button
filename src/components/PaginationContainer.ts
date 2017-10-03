@@ -22,10 +22,6 @@ interface PaginationContainerState {
     validationPassed?: boolean;
 }
 
-interface PaginationContainerProps extends WrapperProps {
-    hideUnusedPaging: boolean;
-}
-
 interface ValidateProps {
     maxPageSize: number;
     offset: number;
@@ -34,11 +30,11 @@ interface ValidateProps {
     targetNode?: HTMLElement | null;
 }
 
-export default class PaginationContainer extends Component<PaginationContainerProps, PaginationContainerState> {
+export default class PaginationContainer extends Component<WrapperProps, PaginationContainerState> {
     private navigationHandler: object;
     private listListViewHeight: number;
 
-    constructor(props: PaginationContainerProps) {
+    constructor(props: WrapperProps) {
         super(props);
 
         this.state = {
@@ -112,13 +108,14 @@ export default class PaginationContainer extends Component<PaginationContainerPr
             let targetListView: ListView | null = null;
             let maxPageSize = 0;
             let offset = 0;
+            let dataSource: ListView["_datasource"];
 
             if (targetNode) {
                 this.hideLoadMoreButton(targetNode);
                 targetListView = dijitRegistry.byNode(targetNode);
 
                 if (targetListView) {
-                    const dataSource = targetListView._datasource;
+                    dataSource = targetListView._datasource;
                     maxPageSize = dataSource._setSize;
                     offset = targetListView._datasource._pageSize;
                     hideUnusedPaging = (offset >= dataSource._setSize) && this.props.hideUnusedPaging;

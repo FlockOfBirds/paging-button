@@ -1,8 +1,6 @@
 import { Component, createElement } from "react";
 import * as classNames from "classnames";
 
-// export type ButtonType = "firstButton" | "nextButton" | "previousButton" | "lastButton";
-
 export interface PageButtonProps {
     cssClass?: string;
     displayOption?: string;
