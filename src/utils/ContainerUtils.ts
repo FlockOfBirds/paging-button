@@ -1,11 +1,22 @@
-export interface PaginationContainerProps extends WrapperProps {
-    hideUnusedPaging: boolean;
-}
+export type PageStyleType = "custom" | "default";
+
+export type ItemType = Array<{
+    caption: string,
+    cssClass: string,
+    displayOption: "icon" | "text" | "iconText",
+    item: "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text",
+    iconClass: string,
+    text: string
+}>;
 
 export interface WrapperProps {
     "class"?: string;
+    caption: string;
     friendlyId: string;
+    hideUnusedPaging: boolean;
+    items: ItemType;
     mxform: mxui.lib.form._FormBase;
+    pagingStyle: PageStyleType;
     style: string;
 }
 

@@ -5,7 +5,7 @@ import * as classNames from "classnames";
 import * as dojoConnect from "dojo/_base/connect";
 import * as dojoAspect from "dojo/aspect";
 
-import { ListView, PaginationContainerProps, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
+import { ListView, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
 import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "../utils/ValidateConfigs";
 import { Alert } from "./Alert";
@@ -20,6 +20,10 @@ interface PaginationContainerState {
     targetListView?: ListView | null;
     targetNode?: HTMLElement | null;
     validationPassed?: boolean;
+}
+
+interface PaginationContainerProps extends WrapperProps {
+    hideUnusedPaging: boolean;
 }
 
 interface ValidateProps {
@@ -86,10 +90,13 @@ export default class PaginationContainer extends Component<PaginationContainerPr
     private renderPageButton(): ReactElement<PaginationProps> | null {
         if (this.state.validationPassed) {
             return createElement(Pagination, {
+                caption: this.props.caption,
                 hideUnusedPaging: this.state.hideUnusedPaging,
+                items: this.props.items,
                 maxPageSize: this.state.maxPageSize,
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
+                pagingStyle: this.props.pagingStyle,
                 setMessageStatus: PaginationContainer.setMessageStatus
             });
         }
