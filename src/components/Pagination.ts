@@ -237,13 +237,24 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     }
 
     private setMessageStatus(currentOffset: number, offset: number, maxPageSize: number): string {
+        let fromValue = currentOffset + 1;
+        let toValue = 0;
+
+        if (maxPageSize === 0) {
+            fromValue = 0;
+        } else if (maxPageSize < offset || (currentOffset + offset) > maxPageSize) {
+            toValue = maxPageSize;
+        } else {
+            toValue = currentOffset + offset;
+        }
+
         if (this.props.caption) {
             return this.props.caption
-                .replace("{firstItem}", currentOffset.toString())
-                .replace("{lastItem}", offset.toString())
+                .replace("{firstItem}", fromValue.toString())
+                .replace("{lastItem}", toValue.toString())
                 .replace("{totalItems}", maxPageSize.toString());
         }
 
-        return this.props.setMessageStatus(currentOffset, offset, maxPageSize);
+        return this.props.setMessageStatus(fromValue, toValue, maxPageSize);
     }
 }

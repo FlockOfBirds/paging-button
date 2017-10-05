@@ -50,18 +50,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         this.navigationHandler = dojoConnect.connect(props.mxform, "onNavigation", this , this.findListView);
     }
 
-    public static setMessageStatus(currentOffset: number, offset: number, maxPageSize: number): string {
-        let fromValue = currentOffset + 1;
-        let toValue = 0;
-
-        if (maxPageSize === 0) {
-            fromValue = 0;
-        } else if (maxPageSize < offset || (currentOffset + offset) > maxPageSize) {
-            toValue = maxPageSize;
-        } else {
-            toValue = currentOffset + offset;
-        }
-
+    public static translateMessageStatus(fromValue: number, toValue: number, maxPageSize: number): string {
         return window.mx.ui.translate("mxui.lib.MxDataSource", "status", [ fromValue, toValue, maxPageSize ]);
     }
 
@@ -93,7 +82,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
                 pagingStyle: this.props.pagingStyle,
-                setMessageStatus: PaginationContainer.setMessageStatus
+                setMessageStatus: PaginationContainer.translateMessageStatus
             });
         }
 

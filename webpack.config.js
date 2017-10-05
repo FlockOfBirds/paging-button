@@ -3,13 +3,14 @@ const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const package = require("./package");
+const packageName = package.widgetName.toLowerCase();
 const widgetName = package.widgetName;
 
 const widgetConfig = {
     entry: `./src/components/${widgetName}Container.ts`,
     output: {
         path: path.resolve(__dirname, "dist/tmp"),
-        filename: `src/com/mendix/widget/custom/pagination/${widgetName}.js`,
+        filename: `src/com/mendix/widget/custom/${packageName}/${widgetName}.js`,
         libraryTarget: "umd"
     },
     resolve: {
@@ -33,7 +34,7 @@ const widgetConfig = {
         new CopyWebpackPlugin([
             { from: "src/**/*.xml" },
         ], { copyUnmodified: true }),
-        new ExtractTextPlugin({ filename: `./src/com/mendix/widget/custom/pagination/ui/${widgetName}.css` }),
+        new ExtractTextPlugin({ filename: `./src/com/mendix/widget/custom/${packageName}/ui/${widgetName}.css` }),
         new webpack.LoaderOptionsPlugin({ debug: true })
     ]
 };
