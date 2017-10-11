@@ -42,6 +42,7 @@
     "@types/karma": "^0.13.36",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.4",
+    "@types/react-paginate": "^4.3.1",
     "@types/webdriverio": "^4.8.2",
     "check-dependencies": "^1.1.0",
     "copy-webpack-plugin": "^4.0.1",
@@ -82,6 +83,7 @@
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
     "remap-istanbul": "^0.9.0",
+    "sass-loader": "^6.0.3",
     "source-map-loader": "^0.2.1",
     "style-loader": "^0.18.2",
     "ts-loader": "^2.3.7",
@@ -98,6 +100,7 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "classnames": "^2.2.5"
+    "classnames": "^2.2.5",
+    "react-paginate": "^4.4.4"
   }
 }

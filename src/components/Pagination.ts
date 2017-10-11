@@ -1,7 +1,8 @@
 import { Component, ReactElement, createElement } from "react";
 import * as classNames from "classnames";
+// import ReactPaginate from "react-paginate";
 
-import { PageButton } from "./PageButton";
+import { PageButton, PageButtonProps } from "./PageButton";
 import { ItemType, PageStyleType } from "../utils/ContainerUtils";
 
 export interface PaginationProps {
@@ -21,13 +22,7 @@ interface PaginationState {
     statusMessage: string;
     previousIsDisabled: boolean;
     nextIsDisabled: boolean;
-}
-
-interface ButtonProps {
-    cssClass?: string;
-    displayOption?: string;
-    iconClass?: string;
-    text?: string;
+    pageCount: number;
 }
 
 export class Pagination extends Component<PaginationProps, PaginationState> {
@@ -38,6 +33,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             currentOffset: 0,
             isVisible: !this.props.hideUnusedPaging,
             nextIsDisabled: false,
+            pageCount: 0,
             previousIsDisabled: true,
             statusMessage: ""
 
@@ -47,11 +43,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.lastPageClickAction = this.lastPageClickAction.bind(this);
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
         this.previousPageClickAction = this.previousPageClickAction.bind(this);
-        this.createFirstButton = this.createFirstButton.bind(this);
-        this.createNextButton = this.createNextButton.bind(this);
-        this.createPreviousButton = this.createPreviousButton.bind(this);
-        this.createLastButton = this.createLastButton.bind(this);
-        this.createPageButton = this.createPageButton.bind(this);
         this.setMessageStatus = this.setMessageStatus.bind(this);
     }
 
@@ -66,6 +57,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         const { maxPageSize, offset } = this.props;
 
         this.setState({
+            pageCount: Math.ceil(maxPageSize / offset),
             statusMessage: this.setMessageStatus(this.state.currentOffset, offset, maxPageSize)
         });
 
@@ -76,7 +68,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
     componentWillReceiveProps(nextProps: PaginationProps) {
         this.setState({
-            statusMessage: this.props.setMessageStatus(this.state.currentOffset, nextProps.offset, nextProps.maxPageSize)
+            statusMessage: this.setMessageStatus(this.state.currentOffset, nextProps.offset, nextProps.maxPageSize)
         });
     }
 
@@ -84,7 +76,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         return [
             this.createFirstButton(),
             this.createPreviousButton(),
-            createElement("span", { className: "paging-status" }, this.state.statusMessage),
+            this.createMessage(),
             this.createNextButton(),
             this.createLastButton()
         ];
@@ -93,90 +85,81 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     private renderCustom() {
         return this.props.items.map(option => {
             const buttonProps = {
-                cssClass: option.cssClass,
-                displayOption: option.displayOption,
-                iconClass: option.iconClass,
-                text: option.text
+                buttonType: option.item,
+                message: option.text,
+                showIcon: option.showIcon
             };
 
-            if (option.item === "firstButton") {
+            if (buttonProps.buttonType === "firstButton") {
                 return this.createFirstButton(buttonProps);
             }
 
-            if (option.item === "nextButton") {
-                return this.createNextButton(buttonProps);
+            if (buttonProps.buttonType === "nextButton") {
+               return this.createNextButton(buttonProps);
             }
 
-            if (option.item === "previousButton") {
+            if (buttonProps.buttonType === "previousButton") {
                 return this.createPreviousButton(buttonProps);
             }
 
-            if (option.item === "lastButton") {
+            if (buttonProps.buttonType === "lastButton") {
                 return this.createLastButton(buttonProps);
             }
 
-            if (option.item === "text") {
-                return createElement("span", { className: option.cssClass }, this.state.statusMessage);
+            if (buttonProps.buttonType === "text" && !option.showIcon) {
+                return this.createMessage();
             }
+            //
+            // if (buttonProps.buttonType === "more") {
+            //     return createElement(ReactPaginate, {
+            //         breakLabel: createElement("a", {}, "..."),
+            //         marginPagesDisplayed: 5,
+            //         pageCount: this.props.maxPageSize,
+            //         pageRangeDisplayed: 5
+            //     });
+            // }
         });
     }
 
-    private createFirstButton(buttonProps?: ButtonProps) {
-        if (!buttonProps) {
-            buttonProps = {
-                cssClass: "btn mx-button mx-name-paging-first",
-                iconClass: "glyphicon glyphicon-step-backward"
-            };
-            return this.createPageButton(this.state.previousIsDisabled, this.firstPageClickAction, buttonProps);
-        }
-
-        return this.createPageButton(this.state.previousIsDisabled, this.firstPageClickAction, buttonProps);
-    }
-
-    private createNextButton(buttonProps?: ButtonProps) {
-        if (!buttonProps) {
-            buttonProps = {
-                cssClass: "btn mx-button mx-name-paging-next",
-                iconClass: "glyphicon glyphicon-forward"
-            };
-            return this.createPageButton(this.state.nextIsDisabled, this.nextPageClickAction, buttonProps);
-        }
-
-        return this.createPageButton(this.state.nextIsDisabled, this.nextPageClickAction, buttonProps);
-    }
-
-    private createLastButton(buttonProps?: ButtonProps) {
-        if (!buttonProps) {
-            buttonProps = {
-                cssClass: "btn mx-button mx-name-paging-last",
-                iconClass: "glyphicon glyphicon-step-forward"
-            };
-            return this.createPageButton(this.state.nextIsDisabled, this.lastPageClickAction, buttonProps);
-        }
-
-        return this.createPageButton(this.state.nextIsDisabled, this.lastPageClickAction, buttonProps);
-    }
-
-    private createPreviousButton(buttonProps?: ButtonProps) {
-        if (!buttonProps) {
-            buttonProps = {
-                cssClass: "btn mx-button mx-name-paging-previous",
-                iconClass: "glyphicon glyphicon-backward"
-            };
-            return this.createPageButton(this.state.previousIsDisabled, this.previousPageClickAction, buttonProps);
-        }
-
-        return this.createPageButton(this.state.previousIsDisabled, this.previousPageClickAction, buttonProps);
-    }
-
-    private createPageButton(isDisabled: boolean, onClickAction: () => void, buttonProps?: ButtonProps) {
+    private createFirstButton(buttonProps?: PageButtonProps) {
         return createElement(PageButton, {
             ...buttonProps,
-            isDisabled,
-            onClickAction
+            buttonType: "firstButton",
+            isDisabled: this.state.previousIsDisabled,
+            onClickAction: this.firstPageClickAction
         });
     }
 
+    private createPreviousButton(buttonProps?: PageButtonProps) {
+        return createElement(PageButton, {
+            ...buttonProps,
+            buttonType: "previousButton",
+            isDisabled: this.state.previousIsDisabled,
+            onClickAction: this.previousPageClickAction
+        });
+    }
+
+    private createNextButton(buttonProps?: PageButtonProps) {
+        return createElement(PageButton, {
+            ...buttonProps,
+            buttonType: "nextButton",
+            isDisabled: this.state.nextIsDisabled,
+            onClickAction: this.nextPageClickAction
+        });
+    }
+
+    private createLastButton(buttonProps?: PageButtonProps) {
+        return createElement(PageButton, {
+            ...buttonProps,
+            buttonType: "lastButton",
+            isDisabled: this.state.nextIsDisabled,
+            onClickAction: this.lastPageClickAction
+        });
+    }
+
+    private createMessage() {
+        return createElement("span", { className: "paging-status" }, this.state.statusMessage);
+    }
     private firstPageClickAction() {
         const currentOffset = 0;
 
@@ -208,13 +191,25 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         const currentOffset = this.state.currentOffset - this.props.offset;
         const { offset, maxPageSize } = this.props;
 
-        this.setState({
-            currentOffset,
-            nextIsDisabled: currentOffset > 0,
-            previousIsDisabled: currentOffset === 0,
-            statusMessage: this.setMessageStatus(currentOffset, offset, maxPageSize)
-        });
-
+        // this.setState({
+        //     currentOffset,
+        //     nextIsDisabled: currentOffset > 0,
+        //     previousIsDisabled: currentOffset === 0,
+        //     statusMessage: this.setMessageStatus(currentOffset, offset, maxPageSize)
+        // });
+        if (currentOffset > 0) {
+            this.setState({
+                currentOffset,
+                nextIsDisabled: false,
+                statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+            });
+        } else if (currentOffset === 0) {
+            this.setState({
+                currentOffset,
+                previousIsDisabled: true,
+                statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+            });
+        }
         this.props.onClickAction(currentOffset);
     }
 

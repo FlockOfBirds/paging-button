@@ -9,7 +9,7 @@ import { ListView, WrapperProps, findTargetNode, parseStyle } from "../utils/Con
 import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "../utils/ValidateConfigs";
 import { Alert } from "./Alert";
-import "../ui/Pagination.css";
+import "../ui/Pagination.scss";
 
 interface PaginationContainerState {
     findingListViewWidget: boolean;
@@ -68,6 +68,12 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         );
     }
 
+    componentDidMount() {
+        const queryNode = findDOMNode(this) as HTMLElement;
+        const targetNode = findTargetNode(queryNode);
+        this.hideLoadMoreButton(targetNode);
+    }
+
     componentWillUnmount() {
         dojoConnect.disconnect(this.navigationHandler);
     }
@@ -111,7 +117,10 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
 
                     dojoAspect.after(targetListView, "_onLoad", () => {
                         if (this.state.targetListView) {
-                            this.setState({ maxPageSize: this.state.targetListView._datasource._setSize });
+                            this.setState({
+                                maxPageSize: this.state.targetListView._datasource._setSize,
+                                offset
+                            });
                         }
                     });
                 }
@@ -140,14 +149,16 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         });
     }
 
-    private hideLoadMoreButton(targetNode: HTMLElement) {
-        const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+    private hideLoadMoreButton(targetNode?: HTMLElement | null) {
+        if (targetNode) {
+            const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
 
-        if (buttonNode) {
-            buttonNode.classList.add("widget-pagination-hide-load-more");
+            if (buttonNode) {
+                buttonNode.classList.add("widget-pagination-hide-load-more");
+            }
+
+            this.listListViewHeight = targetNode.clientHeight;
         }
-
-        this.listListViewHeight = targetNode.clientHeight;
     }
 
     private updateListView(offSet: number) {

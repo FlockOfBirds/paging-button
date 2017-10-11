@@ -6,7 +6,7 @@ export interface ValidateConfigProps extends WrapperProps {
     targetListView?: ListView | null;
 }
 
-const getAlertMessage = (friendlyId: string, message: string) => `Custom widget ${friendlyId} Error in configuration" ${message}`;
+const getAlertMessage = (friendlyId: string, message: string) => `Custom widget ${friendlyId} error in configuration" ${message}`;
 
 export class ValidateConfigs {
 

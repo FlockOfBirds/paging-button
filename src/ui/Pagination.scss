@@ -1,0 +1,39 @@
+.widget-pagination {
+    .mx-button {
+        padding: 12px;
+        color: #000;
+        border-color: transparent;
+    }
+
+    .btn:hover, .btn:active {
+        color: #0595DB;
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+    .btn:focus {
+        color: #000;
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+    .pagination {
+        position: relative;
+
+        .disabled, .disabled:focus {
+            border-color: transparent;
+            color: #999;
+        }
+
+        span {
+            span.button-text {
+                margin-left: 2px;
+                margin-right: 2px;
+            }
+        }
+    }
+}
+
+.widget-pagination-hide-load-more {
+    display: none !important;
+}

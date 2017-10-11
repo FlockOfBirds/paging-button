@@ -93,5 +93,5 @@ export function getVisibleProperties(valueMap: WrapperProps, visibilityMap: Visi
 }
 
 export function getPreviewCss() {
-    return require("./ui/Pagination.css");
+    return require("./ui/Pagination.scss");
 }

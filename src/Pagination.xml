@@ -9,15 +9,6 @@
             <category>Appearance</category>
             <description>Hide paging buttons when there is only one page</description>
         </property>
-        <property key="caption" type="translatableString" required="false">
-            <caption>Caption</caption>
-            <category>Appearance</category>
-            <description>Use placeholder: {firstItem} {lastItem} {totalItems}</description>
-            <translations>
-                <translation lang="en_US">{firstItem} to {lastItem} of {totalItems}</translation>
-                <translation lang="nl_NL">{firstItem} tot {lastItem} van {totalItems}</translation>
-            </translations>
-        </property>
         <property key="pagingStyle" type="enumeration" defaultValue="default">
             <caption>Paging style</caption>
             <category>Appearance</category>
@@ -42,32 +33,22 @@
                         <enumerationValue key="nextButton">Next button</enumerationValue>
                         <enumerationValue key="previousButton">Previous button</enumerationValue>
                         <enumerationValue key="text">Text</enumerationValue>
+                        <enumerationValue key="break">Break</enumerationValue>
                     </enumerationValues>
-                </property>
-                <property key="displayOption" type="enumeration" defaultValue="icon">
-                    <caption>Display option</caption>
-                    <category>Appearance</category>
-                    <description>Choose how paging button should be shown </description>
-                    <enumerationValues>
-                        <enumerationValue key="icon">Icon</enumerationValue>
-                        <enumerationValue key="text">Text</enumerationValue>
-                        <enumerationValue key="iconText">Icon and text</enumerationValue>
-                    </enumerationValues>
-                </property>
-                <property key="iconClass" type="string" required="false">
-                    <caption>Image icon</caption>
-                    <category>General</category>
-                    <description>Adds icon with class in the button</description>
                 </property>
                 <property key="text" type="translatableString" required="false">
                     <caption>Text</caption>
                     <category>General</category>
-                    <description></description>
+                    <description>Use placeholder: {firstItem} {lastItem} {totalItems} {currentPageNumber} {totalPages}</description>
+                    <translations>
+                        <translation lang="en_US">{firstItem} to {lastItem} of {totalItems}</translation>
+                        <translation lang="nl_NL">{firstItem} tot {lastItem} van {totalItems}</translation>
+                    </translations>
                 </property>
-                <property key="cssClass" type="string" required="false">
-                    <caption>CSS Class</caption>
-                    <category>General</category>
-                    <description>Class placed on the item</description>
+                <property key="showIcon" type="boolean" defaultValue="true">
+                    <caption>Show icon only</caption>
+                    <category>Appearance</category>
+                    <description>When no, both text and icon will be shown</description>
                 </property>
             </properties>
         </property>
