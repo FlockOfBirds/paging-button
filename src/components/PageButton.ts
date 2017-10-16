@@ -1,11 +1,11 @@
 import { SFC, createElement } from "react";
 import * as classNames from "classnames";
 
-import { ButtonType } from "../utils/ContainerUtils";
+import { ButtonType, IconType } from "../utils/ContainerUtils";
 
 export interface PageButtonProps {
     buttonType?: ButtonType;
-    showIcon?: boolean;
+    showIcon?: IconType;
     onClickAction?: () => void;
     isDisabled?: boolean;
     message?: string;
@@ -35,7 +35,7 @@ export const PageButton: SFC<PageButtonProps> = (props) => {
         iconClass = "glyphicon glyphicon-step-forward";
     }
 
-    if (props.showIcon) {
+    if (props.showIcon === "default") {
         return createElement("button", {
                 className: classNames(cssClass, { disabled: props.isDisabled }),
                 onClick: props.onClickAction

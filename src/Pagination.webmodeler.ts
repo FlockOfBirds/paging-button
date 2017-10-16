@@ -36,6 +36,7 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
             }),
             createElement(Pagination, {
                 caption: this.props.caption,
+                getMessageStatus: () => "[2 to 10 of 50]",
                 hideUnusedPaging: false,
                 items: this.props.items,
                 listViewSize: 10,
@@ -44,8 +45,7 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
                 onClickAction: () => {
                     return;
                 },
-                pagingStyle: this.props.pagingStyle,
-                setMessageStatus: () => "[2 to 10 of 50]"
+                pagingStyle: this.props.pagingStyle
             })
         );
     }

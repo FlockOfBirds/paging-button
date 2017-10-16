@@ -82,14 +82,14 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         if (this.state.validationPassed) {
             return createElement(Pagination, {
                 caption: this.props.caption,
+                getMessageStatus: PaginationContainer.translateMessageStatus,
                 hideUnusedPaging: this.state.hideUnusedPaging,
                 items: this.props.items,
                 listViewSize: this.state.listViewSize,
                 maxPageButtons: this.props.maxPageButtons,
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
-                pagingStyle: this.props.pagingStyle,
-                setMessageStatus: PaginationContainer.translateMessageStatus
+                pagingStyle: this.props.pagingStyle
             });
         }
 
