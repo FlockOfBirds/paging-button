@@ -1,19 +1,21 @@
 import { Component, ReactElement, createElement } from "react";
 import * as classNames from "classnames";
-// import ReactPaginate from "react-paginate";
 
 import { PageButton, PageButtonProps } from "./PageButton";
 import { ItemType, PageStyleType } from "../utils/ContainerUtils";
+import { PageNumberView } from "./PageNumberView";
+import { BreakView } from "./BreakView";
 
 export interface PaginationProps {
     caption: string;
     hideUnusedPaging: boolean;
     items: ItemType;
-    maxPageSize: number;
+    listViewSize: number;
+    maxPageButtons: number;
     offset: number;
     onClickAction: (offset: number) => void;
     pagingStyle: PageStyleType;
-    setMessageStatus: (currentOffset: number, offset: number, maxPageSize: number) => string;
+    setMessageStatus: (currentOffset: number, offset: number, listViewSize: number) => string;
 }
 
 interface PaginationState {
@@ -23,9 +25,11 @@ interface PaginationState {
     previousIsDisabled: boolean;
     nextIsDisabled: boolean;
     pageCount: number;
+    selectedPageNumber: number;
 }
 
 export class Pagination extends Component<PaginationProps, PaginationState> {
+
     constructor(props: PaginationProps) {
         super(props);
 
@@ -35,6 +39,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             nextIsDisabled: false,
             pageCount: 0,
             previousIsDisabled: true,
+            selectedPageNumber: 1,
             statusMessage: ""
 
         };
@@ -44,6 +49,8 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.nextPageClickAction = this.nextPageClickAction.bind(this);
         this.previousPageClickAction = this.previousPageClickAction.bind(this);
         this.setMessageStatus = this.setMessageStatus.bind(this);
+        this.createPageNumberViews = this.createPageNumberViews.bind(this);
+        this.handleSelectedPage = this.handleSelectedPage.bind(this);
     }
 
     render() {
@@ -54,21 +61,21 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     }
 
     componentDidMount() {
-        const { maxPageSize, offset } = this.props;
+        const { listViewSize, offset } = this.props;
 
         this.setState({
-            pageCount: Math.ceil(maxPageSize / offset),
-            statusMessage: this.setMessageStatus(this.state.currentOffset, offset, maxPageSize)
+            pageCount: Math.ceil(listViewSize / offset),
+            statusMessage: this.setMessageStatus(this.state.currentOffset, offset, listViewSize)
         });
 
-        if (maxPageSize === 0 || offset >= maxPageSize) {
+        if (listViewSize === 0 || offset >= listViewSize) {
             this.setState({ nextIsDisabled: true });
         }
     }
 
     componentWillReceiveProps(nextProps: PaginationProps) {
         this.setState({
-            statusMessage: this.setMessageStatus(this.state.currentOffset, nextProps.offset, nextProps.maxPageSize)
+            statusMessage: this.setMessageStatus(this.state.currentOffset, nextProps.offset, nextProps.listViewSize)
         });
     }
 
@@ -95,7 +102,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             }
 
             if (buttonProps.buttonType === "nextButton") {
-               return this.createNextButton(buttonProps);
+                return this.createNextButton(buttonProps);
             }
 
             if (buttonProps.buttonType === "previousButton") {
@@ -109,15 +116,10 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             if (buttonProps.buttonType === "text" && !option.showIcon) {
                 return this.createMessage();
             }
-            //
-            // if (buttonProps.buttonType === "more") {
-            //     return createElement(ReactPaginate, {
-            //         breakLabel: createElement("a", {}, "..."),
-            //         marginPagesDisplayed: 5,
-            //         pageCount: this.props.maxPageSize,
-            //         pageRangeDisplayed: 5
-            //     });
-            // }
+
+            if (buttonProps.buttonType === "pageButtons") {
+                return createElement("ul", {}, this.createPageNumberViews());
+            }
         });
     }
 
@@ -160,6 +162,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     private createMessage() {
         return createElement("span", { className: "paging-status" }, this.state.statusMessage);
     }
+
     private firstPageClickAction() {
         const currentOffset = 0;
 
@@ -167,21 +170,23 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             currentOffset,
             nextIsDisabled: false,
             previousIsDisabled: true,
-            statusMessage: this.setMessageStatus(currentOffset, this.props.offset, this.props.maxPageSize)
+            selectedPageNumber: currentOffset + 1,
+            statusMessage: this.setMessageStatus(currentOffset, this.props.offset, this.props.listViewSize)
         });
 
         this.props.onClickAction(currentOffset);
     }
 
     private nextPageClickAction() {
-        const { maxPageSize, offset } = this.props;
+        const { listViewSize, offset } = this.props;
         const currentOffset = this.state.currentOffset + offset;
 
         this.setState({
             currentOffset,
-            nextIsDisabled: (maxPageSize - currentOffset) <= offset,
-            previousIsDisabled: currentOffset > maxPageSize,
-            statusMessage: this.setMessageStatus(currentOffset, offset, maxPageSize)
+            nextIsDisabled: (listViewSize - currentOffset) <= offset,
+            previousIsDisabled: currentOffset > listViewSize,
+            selectedPageNumber: this.state.selectedPageNumber + 1,
+            statusMessage: this.setMessageStatus(currentOffset, offset, listViewSize)
         });
 
         this.props.onClickAction(currentOffset);
@@ -189,56 +194,148 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
     private previousPageClickAction() {
         const currentOffset = this.state.currentOffset - this.props.offset;
-        const { offset, maxPageSize } = this.props;
+        const { offset, listViewSize } = this.props;
 
-        // this.setState({
-        //     currentOffset,
-        //     nextIsDisabled: currentOffset > 0,
-        //     previousIsDisabled: currentOffset === 0,
-        //     statusMessage: this.setMessageStatus(currentOffset, offset, maxPageSize)
-        // });
         if (currentOffset > 0) {
             this.setState({
                 currentOffset,
                 nextIsDisabled: false,
-                statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+                selectedPageNumber: this.state.selectedPageNumber - 1,
+                statusMessage: this.props.setMessageStatus(currentOffset, offset, listViewSize)
             });
         } else if (currentOffset === 0) {
             this.setState({
                 currentOffset,
                 previousIsDisabled: true,
-                statusMessage: this.props.setMessageStatus(currentOffset, offset, maxPageSize)
+                selectedPageNumber: currentOffset + 1,
+                statusMessage: this.props.setMessageStatus(currentOffset, offset, listViewSize)
             });
         }
         this.props.onClickAction(currentOffset);
     }
 
     private lastPageClickAction() {
-        const { offset, maxPageSize } = this.props;
-        const currentOffset = (maxPageSize % offset) === 0
-            ? maxPageSize - offset
-            : maxPageSize - (maxPageSize % offset);
+        const { offset, listViewSize } = this.props;
+        const currentOffset = (listViewSize % offset) === 0
+            ? listViewSize - offset
+            : listViewSize - (listViewSize % offset);
 
         if (currentOffset > 0) {
             this.setState({
                 currentOffset,
                 nextIsDisabled: true,
                 previousIsDisabled: false,
-                statusMessage: this.setMessageStatus(currentOffset, offset, maxPageSize)
+                selectedPageNumber: Math.ceil(this.props.listViewSize / offset),
+                statusMessage: this.setMessageStatus(currentOffset, offset, listViewSize)
             });
         }
 
         this.props.onClickAction(currentOffset);
     }
 
-    private setMessageStatus(currentOffset: number, offset: number, maxPageSize: number): string {
+    private createPageNumberViews(): Array<ReactElement<any>> {
+        const pageItems: Array<ReactElement<any>> = [];
+        const pageCount = this.props.offset ? Math.ceil(this.props.listViewSize / this.props.offset) : this.props.listViewSize;
+        const margin = 1;
+        let leftSide;
+        let rightSide;
+        const maxPageButtons = this.props.maxPageButtons;
+        let breakViewAdded = false;
+        const divider = Math.ceil(maxPageButtons / 2);
+
+        if (pageCount <= maxPageButtons) {
+            for (let pageIndex = 1; pageIndex <= pageCount; pageIndex++) {
+                pageItems.push(this.getPageNumberView(pageIndex));
+            }
+        } else {
+            leftSide = divider;
+            rightSide = (maxPageButtons - leftSide);
+
+            if (this.state.selectedPageNumber > pageCount - divider) {
+                rightSide = pageCount - this.state.selectedPageNumber;
+                leftSide = maxPageButtons - rightSide;
+            } else if (this.state.selectedPageNumber < divider) {
+                leftSide = this.state.selectedPageNumber;
+                rightSide = maxPageButtons - leftSide;
+            }
+
+            for (let page = 1; page <= pageCount; page++) {
+                if (page <= margin) {
+                    pageItems.push(this.getPageNumberView(page));
+                    continue;
+                }
+
+                if (page === pageCount) {
+                    pageItems.push(this.getPageNumberView(page));
+                    continue;
+                }
+
+                if ((page > this.state.selectedPageNumber - leftSide) && (page < this.state.selectedPageNumber + rightSide)) {
+                    if (this.state.selectedPageNumber + rightSide >= pageCount) {
+                        pageItems.push(this.getPageNumberView(page));
+                        continue;
+                    }
+                    if (breakViewAdded) {
+                        breakViewAdded = false;
+                    }else {
+                        pageItems.push(this.getPageNumberView(page));
+                    }
+                    continue;
+                }
+
+                if (page === 2) {
+                    pageItems.push(createElement(BreakView, {}));
+                    breakViewAdded = true;
+                    continue;
+                }
+
+                if (this.state.selectedPageNumber <= leftSide && page === maxPageButtons) {
+                    pageItems.push(this.getPageNumberView(page));
+                    continue;
+                }
+
+                if (page === pageCount - 1) {
+                    pageItems.push(createElement(BreakView, {}));
+                }
+            }
+        }
+
+        return pageItems;
+    }
+
+    private getPageNumberView(pageNumber: number) {
+        return createElement(PageNumberView, {
+            onClick: () => this.handleSelectedPage(pageNumber),
+            page: pageNumber,
+            selected: this.state.selectedPageNumber === pageNumber
+        });
+    }
+
+    private handleSelectedPage(selectedPageNumber: number) {
+        const currentOffset = (selectedPageNumber - 1) * this.props.offset;
+
+        if (this.state.selectedPageNumber === selectedPageNumber) {
+            return;
+        }
+
+        this.setState({
+            currentOffset,
+            nextIsDisabled: (currentOffset + this.props.offset) === this.props.listViewSize,
+            previousIsDisabled: currentOffset === 0,
+            selectedPageNumber
+        });
+
+        this.props.onClickAction(currentOffset);
+    }
+
+    private setMessageStatus(currentOffset: number, offset: number, listViewSize: number): string {
         let fromValue = currentOffset + 1;
         let toValue = 0;
 
-        if (maxPageSize === 0) {
+        if (listViewSize === 0) {
             fromValue = 0;
-        } else if (maxPageSize < offset || (currentOffset + offset) > maxPageSize) {
-            toValue = maxPageSize;
+        } else if (listViewSize < offset || (currentOffset + offset) > listViewSize) {
+            toValue = listViewSize;
         } else {
             toValue = currentOffset + offset;
         }
@@ -247,9 +344,11 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             return this.props.caption
                 .replace("{firstItem}", fromValue.toString())
                 .replace("{lastItem}", toValue.toString())
-                .replace("{totalItems}", maxPageSize.toString());
+                .replace("{totalItems}", listViewSize.toString())
+                .replace("{currentPageNumber}", this.state.selectedPageNumber.toString())
+                .replace("{totalPages}", (offset ? Math.ceil(listViewSize / offset) : listViewSize).toString());
         }
 
-        return this.props.setMessageStatus(fromValue, toValue, maxPageSize);
+        return this.props.setMessageStatus(fromValue, toValue, listViewSize);
     }
 }

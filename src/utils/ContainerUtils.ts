@@ -1,6 +1,6 @@
 export type PageStyleType = "custom" | "default";
 
-export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text" | "more";
+export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text" | "pageButtons";
 
 export type ItemType = Array<{
     item: ButtonType,
@@ -14,6 +14,7 @@ export interface WrapperProps {
     friendlyId: string;
     hideUnusedPaging: boolean;
     items: ItemType;
+    maxPageButtons: number;
     mxform: mxui.lib.form._FormBase;
     pagingStyle: PageStyleType;
     style: string;

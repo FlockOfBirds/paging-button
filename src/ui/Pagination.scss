@@ -18,7 +18,7 @@
     }
 
     .pagination {
-        position: relative;
+        margin: 0;
 
         .disabled, .disabled:focus {
             border-color: transparent;
@@ -28,7 +28,39 @@
         span {
             span.button-text {
                 margin-left: 2px;
-                margin-right: 2px;
+                margin-right: 5px;
+                vertical-align: middle;
+            }
+
+            button{
+                padding: 0;
+            }
+        }
+
+        ul {
+            background-color:#fff;
+            display: inline-block;
+            padding-left: 15px;
+            padding-right: 15px;
+
+            li {
+                color: black;
+                cursor: pointer;
+                padding: 8px 16px;
+                display: inline-block;
+                width: 48px;
+
+                &.single-digit{
+                    padding-left: 20px;
+                }
+                &.active{
+                    background-color: #0595DB;
+                    color: white;
+                }
+            }
+            li:hover{
+                color: #0595DB;
+                background-color: #DDDDDD;
             }
         }
     }

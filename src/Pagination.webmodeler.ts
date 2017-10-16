@@ -38,7 +38,8 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
                 caption: this.props.caption,
                 hideUnusedPaging: false,
                 items: this.props.items,
-                maxPageSize: 10,
+                listViewSize: 10,
+                maxPageButtons: this.props.maxPageButtons,
                 offset: 2,
                 onClickAction: () => {
                     return;
@@ -88,6 +89,8 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
 
 export function getVisibleProperties(valueMap: WrapperProps, visibilityMap: VisibilityMap) {
     valueMap.hideUnusedPaging = visibilityMap.hideUnusedPaging = false;
+
+    visibilityMap.items = valueMap.pagingStyle !== "default";
 
     return visibilityMap;
 }

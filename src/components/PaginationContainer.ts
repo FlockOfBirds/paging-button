@@ -13,7 +13,7 @@ import "../ui/Pagination.scss";
 
 interface PaginationContainerState {
     findingListViewWidget: boolean;
-    maxPageSize: number;
+    listViewSize: number;
     message: string;
     offset: number;
     hideUnusedPaging: boolean;
@@ -23,7 +23,7 @@ interface PaginationContainerState {
 }
 
 interface ValidateProps {
-    maxPageSize: number;
+    listViewSize: number;
     offset: number;
     hideUnusedPaging: boolean;
     targetListView?: ListView | null;
@@ -40,7 +40,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         this.state = {
             findingListViewWidget: true,
             hideUnusedPaging: false,
-            maxPageSize: 0,
+            listViewSize: 0,
             message: "",
             offset: 1
         };
@@ -84,7 +84,8 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 caption: this.props.caption,
                 hideUnusedPaging: this.state.hideUnusedPaging,
                 items: this.props.items,
-                maxPageSize: this.state.maxPageSize,
+                listViewSize: this.state.listViewSize,
+                maxPageButtons: this.props.maxPageButtons,
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
                 pagingStyle: this.props.pagingStyle,
@@ -101,7 +102,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
             const targetNode = findTargetNode(queryNode);
             let hideUnusedPaging = false;
             let targetListView: ListView | null = null;
-            let maxPageSize = 0;
+            let listViewSize = 0;
             let offset = 0;
             let dataSource: ListView["_datasource"];
 
@@ -111,14 +112,14 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
 
                 if (targetListView) {
                     dataSource = targetListView._datasource;
-                    maxPageSize = dataSource._setSize;
+                    listViewSize = dataSource._setSize;
                     offset = targetListView._datasource._pageSize;
                     hideUnusedPaging = (offset >= dataSource._setSize) && this.props.hideUnusedPaging;
 
                     dojoAspect.after(targetListView, "_onLoad", () => {
                         if (this.state.targetListView) {
                             this.setState({
-                                maxPageSize: this.state.targetListView._datasource._setSize,
+                                listViewSize: this.state.targetListView._datasource._setSize,
                                 offset
                             });
                         }
@@ -126,7 +127,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 }
             }
 
-            this.validateListView({ targetNode, targetListView, hideUnusedPaging, maxPageSize, offset });
+            this.validateListView({ targetNode, targetListView, hideUnusedPaging, listViewSize, offset });
         }
     }
 
@@ -140,7 +141,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         this.setState({
             findingListViewWidget: false,
             hideUnusedPaging: props.hideUnusedPaging,
-            maxPageSize: props.maxPageSize,
+            listViewSize: props.listViewSize,
             message,
             offset: props.offset,
             targetListView: props.targetListView,

@@ -33,7 +33,7 @@
                         <enumerationValue key="nextButton">Next button</enumerationValue>
                         <enumerationValue key="previousButton">Previous button</enumerationValue>
                         <enumerationValue key="text">Text</enumerationValue>
-                        <enumerationValue key="break">Break</enumerationValue>
+                        <enumerationValue key="pageButtons">Page buttons</enumerationValue>
                     </enumerationValues>
                 </property>
                 <property key="text" type="translatableString" required="false">
@@ -45,12 +45,21 @@
                         <translation lang="nl_NL">{firstItem} tot {lastItem} van {totalItems}</translation>
                     </translations>
                 </property>
-                <property key="showIcon" type="boolean" defaultValue="true">
-                    <caption>Show icon only</caption>
-                    <category>Appearance</category>
-                    <description>When no, both text and icon will be shown</description>
+                <property key="showIcon" type="enumeration" defaultValue="default">
+                    <caption>Show icon</caption>
+                    <category>General</category>
+                    <description></description>
+                    <enumerationValues>
+                        <enumerationValue key="default">Default</enumerationValue>
+                        <enumerationValue key="none">None</enumerationValue>
+                    </enumerationValues>
                 </property>
             </properties>
+        </property>
+        <property key="maxPageButtons" type="integer" defaultValue="7">
+            <caption>Max page button</caption>
+            <category>Appearance</category>
+            <description></description>
         </property>
     </properties>
 </widget>

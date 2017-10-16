@@ -42,7 +42,6 @@
     "@types/karma": "^0.13.36",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.4",
-    "@types/react-paginate": "^4.3.1",
     "@types/webdriverio": "^4.8.2",
     "check-dependencies": "^1.1.0",
     "copy-webpack-plugin": "^4.0.1",
@@ -79,6 +78,7 @@
     "pre-commit": "^1.2.2",
     "raw-loader": "^0.5.1",
     "react": "^15.6.1",
+    "react-addons-create-fragment": "^15.6.2",
     "react-addons-test-utils": "^15.6.0",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
@@ -100,7 +100,6 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
-    "react-paginate": "^4.4.4"
+    "classnames": "^2.2.5"
   }
 }
