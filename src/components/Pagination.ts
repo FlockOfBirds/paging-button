@@ -108,7 +108,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 return this.createMessage(buttonProps.message);
             }
 
-            if (buttonProps.buttonType === "pageButtons") {
+            if (buttonProps.buttonType === "pageNumberButtons") {
                 return createElement("ul", {}, this.createPageNumberViews());
             }
         });

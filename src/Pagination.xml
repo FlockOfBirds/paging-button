@@ -33,7 +33,7 @@
                         <enumerationValue key="nextButton">Next button</enumerationValue>
                         <enumerationValue key="previousButton">Previous button</enumerationValue>
                         <enumerationValue key="text">Text</enumerationValue>
-                        <enumerationValue key="pageButtons">Page buttons</enumerationValue>
+                        <enumerationValue key="pageNumberButtons">Page number buttons</enumerationValue>
                     </enumerationValues>
                 </property>
                 <property key="text" type="translatableString" required="false">

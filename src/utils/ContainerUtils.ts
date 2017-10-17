@@ -1,6 +1,6 @@
 export type PageStyleType = "custom" | "default";
 
-export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text" | "pageButtons";
+export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text" | "pageNumberButtons";
 
 export type IconType = "default" | "none";
 

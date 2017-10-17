@@ -14,6 +14,8 @@ export interface PageButtonProps {
 export const PageButton: SFC<PageButtonProps> = (props) => {
     let iconClass = "";
     let cssClass = "";
+    const disabledClass = { disabled: props.isDisabled };
+    const onClick = !props.isDisabled ? props.onClickAction : () => { return; };
 
     if (props.buttonType === "firstButton") {
         cssClass = "btn mx-button mx-name-paging-first";
@@ -37,38 +39,34 @@ export const PageButton: SFC<PageButtonProps> = (props) => {
 
     if (props.showIcon === "default") {
         return createElement("button", {
-                className: classNames(cssClass, { disabled: props.isDisabled }),
-                onClick: props.onClickAction
+                className: classNames(cssClass, disabledClass),
+                onClick
             },
-            createElement("span", {
-                className: iconClass
-            })
+            createElement("span", { className: iconClass })
         );
     }
 
     if (props.buttonType === "firstButton" || props.buttonType === "previousButton") {
-        return createElement("span", {},
-            createElement("button", {
-                    className: classNames(cssClass, { disabled: props.isDisabled }),
-                    onClick: props.onClickAction
-                },
-                createElement("span", {
-                    className: iconClass
-                })
+        return createElement("span", {
+                className: classNames(disabledClass),
+                onClick
+            },
+            createElement("button", { className: classNames(cssClass, disabledClass) },
+                createElement("span", { className: iconClass })
             ),
-            createElement("span", { className: "button-text" }, props.message)
+            createElement("span", { className: "button-text" },
+                props.message
+            )
         );
     }
 
-    return createElement("span", {},
+    return createElement("span", {
+            className: classNames(disabledClass),
+            onClick
+        },
         createElement("span", { className: "button-text" }, props.message),
-        createElement("button", {
-                className: classNames(cssClass, { disabled: props.isDisabled }),
-                onClick: props.onClickAction
-            },
-            createElement("span", {
-                className: iconClass
-            })
+        createElement("button", { className: classNames(cssClass, disabledClass) },
+            createElement("span", {})
         )
     );
 
