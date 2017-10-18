@@ -48,28 +48,29 @@ export const PageButton: SFC<PageButtonProps> = (props) => {
 
     if (props.buttonType === "firstButton" || props.buttonType === "previousButton") {
         return createElement("span", {
-                className: classNames(disabledClass),
+                className: classNames("button-text"),
                 onClick
             },
             createElement("button", { className: classNames(cssClass, disabledClass) },
-                createElement("span", { className: iconClass })
-            ),
-            createElement("span", { className: "button-text" },
-                props.message
+                createElement("span", { className: iconClass }),
+                createElement("span", { className: props.buttonType },
+                    props.message
+                )
             )
         );
     }
 
     return createElement("span", {
-            className: classNames(disabledClass),
+            className: classNames("button-text"),
             onClick
         },
-        createElement("span", { className: "button-text" }, props.message),
         createElement("button", { className: classNames(cssClass, disabledClass) },
-            createElement("span", {})
+            createElement("span", { className: props.buttonType },
+                props.message
+            ),
+            createElement("span", { className: iconClass })
         )
     );
-
 };
 
 PageButton.displayName = "PageButton";
