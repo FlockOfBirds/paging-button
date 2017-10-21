@@ -49,19 +49,19 @@ $widget-pagination-color-disabled: #999;
 
             li {
                 color: black;
-                cursor: pointer;
                 padding: 8px 16px;
                 display: inline-block;
                 width: 48px;
+                cursor: pointer;
 
                 &.single-digit{
                     padding-left: 20px;
                 }
-                &.active, &.active:hover{
+                &.active:not(.break-view), &.active:hover:not(.break-view){
                     background-color: $widget-pagination-color-active;
                     color: white;
                 }
-                &:hover{
+                &:hover:not(.break-view){
                     color: $widget-pagination-color-active;
                     background-color: #DDDDDD;
                 }
