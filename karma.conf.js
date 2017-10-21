@@ -12,7 +12,8 @@ Object.assign(webpackConfig, {
         "mxui/widget/_WidgetBase",
         "dijit/registry",
         "dojo/_base/lang",
-        "dojo/_base/connect"
+        "dojo/_base/connect",
+        "dojo/aspect"
     ]
 });
 

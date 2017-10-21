@@ -35,7 +35,6 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
                 message: this.state.message
             }),
             createElement(Pagination, {
-                caption: this.props.caption,
                 getMessageStatus: () => "[2 to 10 of 50]",
                 hideUnusedPaging: false,
                 items: this.props.items,

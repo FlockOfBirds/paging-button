@@ -81,7 +81,6 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
     private renderPageButton(): ReactElement<PaginationProps> | null {
         if (this.state.validationPassed) {
             return createElement(Pagination, {
-                caption: this.props.caption,
                 getMessageStatus: PaginationContainer.translateMessageStatus,
                 hideUnusedPaging: this.state.hideUnusedPaging,
                 items: this.props.items,

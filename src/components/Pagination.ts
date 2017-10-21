@@ -7,7 +7,6 @@ import { PageNumberView } from "./PageNumberView";
 import { BreakView } from "./BreakView";
 
 export interface PaginationProps {
-    caption: string;
     hideUnusedPaging: boolean;
     items: ItemType;
     listViewSize: number;
@@ -18,7 +17,7 @@ export interface PaginationProps {
     pagingStyle: PageStyleType;
 }
 
-interface PaginationState {
+export interface PaginationState {
     currentOffset: number;
     isVisible?: boolean;
     previousIsDisabled: boolean;
@@ -68,6 +67,13 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         if (listViewSize === 0 || offset >= listViewSize) {
             this.setState({ nextIsDisabled: true });
         }
+    }
+
+    componentWillReceiveProps(_nextProps: PaginationProps) {
+        this.setState({
+            currentOffset: 0,
+            selectedPageNumber: 1
+        });
     }
 
     private renderDefault(): Array<ReactElement<{}>> {
@@ -192,7 +198,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 nextIsDisabled: false,
                 selectedPageNumber: this.state.selectedPageNumber - 1
             });
-        } else if (currentOffset === 0) {
+        } else if (currentOffset <= 0) {
             this.setState({
                 currentOffset,
                 previousIsDisabled: true,
@@ -222,13 +228,16 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
     private createPageNumberViews(): Array<ReactElement<any>> {
         const pageItems: Array<ReactElement<any>> = [];
-        const pageCount = this.props.offset ? Math.ceil(this.props.listViewSize / this.props.offset) : this.props.listViewSize;
         const margin = 1;
         let leftSide;
         let rightSide;
         const maxPageButtons = this.props.maxPageButtons;
         let breakViewAdded = false;
         const divider = Math.ceil(maxPageButtons / 2);
+
+        const pageCount = this.props.offset && this.props.offset !== 0
+            ? Math.ceil(this.props.listViewSize / this.props.offset)
+            : this.props.listViewSize;
 
         if (pageCount <= maxPageButtons) {
             for (let pageIndex = 1; pageIndex <= pageCount; pageIndex++) {
@@ -292,6 +301,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
     private getPageNumberView(pageNumber: number) {
         return createElement(PageNumberView, {
+            key: `key${pageNumber}`,
             onClick: () => this.handleSelectedPage(pageNumber),
             page: pageNumber,
             selected: this.state.selectedPageNumber === pageNumber
@@ -335,7 +345,12 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 .replace("{lastItem}", toValue.toString())
                 .replace("{totalItems}", listViewSize.toString())
                 .replace("{currentPageNumber}", this.state.selectedPageNumber.toString())
-                .replace("{totalPages}", (offset ? Math.ceil(listViewSize / offset) : listViewSize).toString());
+                .replace("{totalPages}",
+                    (
+                        offset && offset !== 0
+                            ? Math.ceil(listViewSize / offset)
+                            : listViewSize
+                    ).toString());
         }
 
         return this.props.getMessageStatus(fromValue, toValue, listViewSize);
