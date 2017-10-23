@@ -14,7 +14,7 @@ To set up the development environment, run:
 Create a folder named `dist` in the project root.
 
 Create a Mendix test project in the dist folder and rename its root folder to `dist/MxTestProject`. Changes to the widget code shall be automatically pushed to this test project.
-Or get the test project from [https://github.com/mendixlabs/pagination/releases/latest](https://github.com/mendixlabs/pagination/releases/latest)
+Or get the test project from [https://github.com/mendixlabs/paging-button/releases/latest](https://github.com/mendixlabs/paging-button/releases/latest)
 
 To automatically compile, bundle and push code changes to the running test project, run:
 

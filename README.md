@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/mendixlabs/pagination.svg?branch=master)](https://travis-ci.org/mendixlabs/pagination)
-[![Dependency Status](https://david-dm.org/mendixlabs/pagination.svg)](https://david-dm.org/mendixlabs/pagination)
-[![Dev Dependency Status](https://david-dm.org/mendixlabs/pagination.svg#info=devDependencies)](https://david-dm.org/mendixlabs/pagination#info=devDependencies)
-[![codecov](https://codecov.io/gh/mendixlabs/pagination/branch/master/graph/pagination.svg)](https://codecov.io/gh/mendixlabs/pagination)
-![badge](https://img.shields.io/badge/mendix-7.6.0-green.svg)
+[![Build Status](https://travis-ci.org/mendixlabs/paging-button.svg?branch=master)](https://travis-ci.org/mendixlabs/paging-button)
+[![Dependency Status](https://david-dm.org/mendixlabs/paging-button.svg)](https://david-dm.org/mendixlabs/paging-button)
+[![Dev Dependency Status](https://david-dm.org/mendixlabs/paging-button.svg#info=devDependencies)](https://david-dm.org/mendixlabs/paging-button#info=devDependencies)
+[![codecov](https://codecov.io/gh/mendixlabs/pagination/branch/master/graph/paging-button.svg)](https://codecov.io/gh/mendixlabs/paging-button)
+![badge](https://img.shields.io/badge/mendix-7.1.1-green.svg)
 
 # PAGINATION
 
@@ -20,11 +20,11 @@ ie:
 * Hide unused buttons.
 
 ## Dependencies
-Mendix 7.6
+Mendix 7.7.1
 
 ## Demo project
 
-[https://pagebutton.mxapps.io/](https://pagebutton.mxapps.io/)
+[https://pagination100.mxapps.io/](https://pagination100.mxapps.io/)
 
 ![Demo](/assets/demo.gif)
 
@@ -38,7 +38,7 @@ Mendix 7.6
  For example when the records are few
 
 ## Issues, suggestions and feature requests
-Please report issues at [https://github.com/mendixlabs/pagination/issues](https://github.com/mendixlabs/pagination/issues).
+Please report issues at [https://github.com/mendixlabs/paging-button/issues](https://github.com/mendixlabs/paging-button/issues).
 
 ## Development and contribution
 Please follow [development guide](/development.md).
