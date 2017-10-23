@@ -2,6 +2,7 @@ $widget-pagination-color-active: #0595DB;
 $widget-pagination-color-disabled: #999;
 
 .widget-pagination {
+    overflow: hidden;
     .pagination {
         margin: 0;
         overflow: hidden;
