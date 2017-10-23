@@ -21,9 +21,9 @@ cache:
   - node_modules
 env:
   global:
-  - MX_APP_NAME=pagebutton
+  - MX_APP_NAME=pagination100
   - MX_BRANCH_NAME=trunk
-  - MX_PROJECT_ID=497a9f3e-5e52-4e58-af28-90b69277ee4c
+  - MX_PROJECT_ID=0ae2965d-6de0-4734-9c7b-24ed0a3e90a4
   - MX_ENVIRONMENT=Sandbox
   - MX_USER=ci@flockofbirds.org
 deploy:
