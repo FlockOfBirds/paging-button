@@ -53,7 +53,9 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     render() {
         return createElement("div",
             { className: classNames("pagination", `${this.state.isVisible ? "visible" : "hidden"}`) },
-            this.props.pagingStyle === "default" ? this.renderDefault() : this.renderCustom()
+            this.props.pagingStyle === "default"
+                ? this.renderDefault()
+                : this.renderCustom()
         );
     }
 
@@ -201,6 +203,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         } else if (currentOffset <= 0) {
             this.setState({
                 currentOffset,
+                nextIsDisabled: false,
                 previousIsDisabled: true,
                 selectedPageNumber: currentOffset + 1
             });
