@@ -1,16 +1,18 @@
 import page from "./pages/home.page";
 import indexPage from "./pages/index.page";
 
-const testValueOne = "Color 1";
-const testValueFive = "Color 5";
-const testValueSeven = "Color 7";
-const testValueThirteen = "Color 13";
-const testLastItemValue = "Color P 17";
+const testValueOne = "Color 2";
+const testValueFive = "Color 22";
+const testValueSeven = "Color 24";
+const testValueThirteen = "Color 26";
+const testLastItemValue = "Color P 12";
 
 describe("Pagination", () => {
 
     beforeAll(() => {
         indexPage.tearDownSetUp();
+        // wait for the records to be populated
+        browser.timeouts("implicit", 10 * 1000);
     });
 
     it("when next button is clicked list view should have those items", () => {
@@ -25,9 +27,9 @@ describe("Pagination", () => {
 
         page.nextButton.click();
         page.nextButton.click();
-        page.listViewFifthItem.waitForVisible();
+        page.listViewThirdItem.waitForVisible();
 
-        const itemValueFive = page.listViewFifthItem.getHTML();
+        const itemValueFive = page.listViewThirdItem.getHTML();
         expect(itemValueFive).toContain(testValueFive);
     });
 
@@ -40,6 +42,7 @@ describe("Pagination", () => {
         page.nextButton.click();
         page.nextButton.click();
         page.lastButton.click();
+        page.listViewLastItem.waitForVisible();
 
         const lastItemValue = page.listViewLastItem.getHTML();
         expect(lastItemValue).toContain(testLastItemValue);
@@ -56,6 +59,7 @@ describe("Pagination", () => {
         page.nextButton.click();
         page.nextButton.click();
         page.firstButton.click();
+        page.listViewFirstItem.waitForVisible();
 
         const newItemValue = page.listViewFirstItem.getHTML();
         expect(newItemValue).toContain(testValueOne);
@@ -80,11 +84,11 @@ describe("Pagination", () => {
 
     it("when custom button is clicked list view should show item on the custom page ", () => {
         page.open();
-        page.customButtonSeven.waitForVisible();
-        page.customButtonSeven.click();
-        page.listViewThirteenthItem.waitForVisible();
+        page.customButtonFive.waitForVisible();
+        page.customButtonFive.click();
+        page.listViewEighthItem.waitForVisible();
 
-        const thirteenthItemValue = page.listViewThirteenthItem.getHTML();
+        const thirteenthItemValue = page.listViewEighthItem.getHTML();
         expect(thirteenthItemValue).toContain(testValueThirteen);
     });
 });

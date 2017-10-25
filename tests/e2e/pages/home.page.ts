@@ -11,21 +11,21 @@ class Home {
 
     public get previousButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-previous"); }
 
-    public get customButtonSeven() { return browser.element(".mx-name-pagination9 > div > ul > li:nth-child(7)"); }
+    public get customButtonFive() { return browser.element(".mx-name-pagination9 > div > ul > li:nth-child(5)"); }
 
     public get lastButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-last"); }
 
     public get listViewFirstItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-0 > div > div > span"); }
 
-    public get listViewFifthItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-4 > div > div > span"); }
+    public get listViewThirdItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-4 > div > div > span"); }
 
     public get listViewSeventhItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-6 > div > div > span"); }
 
-    public get listViewThirteenthItem() {
-        return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-12 > div > div > span");
+    public get listViewEighthItem() {
+        return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-8 > div > div > span");
     }
 
-    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-48 > div > div > span"); }
+    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-14 > div > div > span"); }
 
     public tearDownSetUp(): void {
         this.resetButton.waitForVisible();
