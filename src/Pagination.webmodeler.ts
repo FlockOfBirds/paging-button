@@ -87,10 +87,9 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
 }
 
 export function getVisibleProperties(valueMap: WrapperProps, visibilityMap: VisibilityMap) {
-    valueMap.hideUnusedPaging = visibilityMap.hideUnusedPaging = false;
-
-    visibilityMap.items = valueMap.pagingStyle !== "default";
-
+    if (valueMap.pagingStyle === "default") {
+        visibilityMap.items = false;
+    }
     return visibilityMap;
 }
 
