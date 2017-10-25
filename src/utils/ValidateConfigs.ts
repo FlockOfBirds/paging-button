@@ -29,6 +29,9 @@ export class ValidateConfigs {
             && targetListView._datasource
             && targetListView._datasource.setOffset
             && targetListView._datasource._pageSize
+            && targetListView._sourceReload
+            && targetListView._renderData
+            && targetListView._datasource._setSize
             && targetListView._showLoadingIcon
             && targetListView.update);
     }

@@ -55,6 +55,7 @@ describe("Pagination", () => {
     });
 
     describe("when custom", () => {
+
         it("renders the entire structure when the page count is less then maximum number of buttons ", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,
@@ -154,6 +155,7 @@ describe("Pagination", () => {
         it("renders the structure with correct custom message when list view is empty", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,
+                listViewSize: 0,
                 offset: 0,
                 pagingStyle: "custom"
             };
@@ -174,6 +176,7 @@ describe("Pagination", () => {
     });
 
     describe("on navigation", () => {
+
         it("when first button is clicked set page to 1", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,

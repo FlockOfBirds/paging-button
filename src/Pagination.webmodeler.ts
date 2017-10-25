@@ -15,6 +15,7 @@ interface PaginationWebModelerState {
     hideUnusedPaging: boolean;
     message: string;
 }
+
 // tslint:disable-next-line class-name
 export class preview extends Component<WrapperProps, PaginationWebModelerState> {
 

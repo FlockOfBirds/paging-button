@@ -18,21 +18,22 @@ export const PageButton: SFC<PageButtonProps> = (props) => {
     const onClick = !props.isDisabled ? props.onClickAction : () => { return; };
 
     if (props.buttonType === "firstButton") {
+
         cssClass = "btn mx-button mx-name-paging-first";
         iconClass = "glyphicon glyphicon-step-backward";
-    }
 
-    if (props.buttonType === "previousButton") {
+    } else if (props.buttonType === "previousButton") {
+
         cssClass = "btn mx-button mx-name-paging-previous";
         iconClass = "glyphicon glyphicon-backward";
-    }
 
-    if (props.buttonType === "nextButton") {
+    } else if (props.buttonType === "nextButton") {
+
         cssClass = "btn mx-button mx-name-paging-next";
         iconClass = "glyphicon glyphicon-forward";
-    }
 
-    if (props.buttonType === "lastButton") {
+    } else if (props.buttonType === "lastButton") {
+
         cssClass = "btn mx-button mx-name-paging-last";
         iconClass = "glyphicon glyphicon-step-forward";
     }

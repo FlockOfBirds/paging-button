@@ -1,12 +1,18 @@
 import page from "./pages/home.page";
+import indexPage from "./pages/index.page";
 
 const testValueOne = "Color 1";
 const testValueFive = "Color 5";
 const testValueSeven = "Color 7";
 const testValueThirteen = "Color 13";
-const testLastItemValue = "orange";
+const testLastItemValue = "Color P 17";
 
 describe("Pagination", () => {
+
+    beforeAll(() => {
+        indexPage.tearDownSetUp();
+    });
+
     it("when next button is clicked list view should have those items", () => {
         page.open();
         page.paginationOne.waitForVisible();

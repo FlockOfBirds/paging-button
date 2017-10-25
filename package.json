@@ -2,7 +2,7 @@
   "name": "pagination",
   "widgetName": "Pagination",
   "version": "1.0.0",
-  "description": "Page Mendix list view",
+  "description": "Add bootstrap like paging to your list view similar to the built-in data grid. The widget also supports page numbers",
   "copyright": "Mendix BV",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --watch Gruntfile.js --exec \"grunt",

@@ -9,6 +9,7 @@ import { ListView, WrapperProps, findTargetNode, parseStyle } from "../utils/Con
 import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "../utils/ValidateConfigs";
 import { Alert } from "./Alert";
+
 import "../ui/Pagination.scss";
 
 interface PaginationContainerState {
@@ -33,6 +34,7 @@ interface ValidateProps {
 export default class PaginationContainer extends Component<WrapperProps, PaginationContainerState> {
     private navigationHandler: object;
     private listListViewHeight: number;
+    private originlListListViewHeight: string | null;
 
     constructor(props: WrapperProps) {
         super(props);
@@ -69,13 +71,21 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
     }
 
     componentDidMount() {
-        const queryNode = findDOMNode(this) as HTMLElement;
-        const targetNode = findTargetNode(queryNode);
+        const targetNode = this.getTargetNode();
+
         this.hideLoadMoreButton(targetNode);
     }
 
     componentWillUnmount() {
+        const targetNode = this.getTargetNode();
+
         dojoConnect.disconnect(this.navigationHandler);
+        this.showLoadMoreButton(targetNode);
+    }
+
+    private getTargetNode() {
+        const queryNode = findDOMNode(this) as HTMLElement;
+        return findTargetNode(queryNode);
     }
 
     private renderPageButton(): ReactElement<PaginationProps> | null {
@@ -112,7 +122,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 if (targetListView) {
                     dataSource = targetListView._datasource;
                     listViewSize = dataSource._setSize;
-                    offset = targetListView._datasource._pageSize;
+                    offset = dataSource._pageSize;
                     hideUnusedPaging = (offset >= dataSource._setSize) && this.props.hideUnusedPaging;
 
                     dojoAspect.after(targetListView, "_onLoad", () => {
@@ -161,12 +171,26 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         }
     }
 
+    private showLoadMoreButton(targetNode?: HTMLElement | null) {
+        if (targetNode) {
+            const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+
+            if (buttonNode) {
+                buttonNode.classList.remove("widget-pagination-hide-load-more");
+            }
+
+            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+            listNode.style.height = this.originlListListViewHeight;
+        }
+    }
+
     private updateListView(offSet: number) {
         const { targetListView, targetNode, validationPassed } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
 
+            this.originlListListViewHeight = listNode.style.height;
             listNode.style.height = `${this.listListViewHeight}px`;
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);

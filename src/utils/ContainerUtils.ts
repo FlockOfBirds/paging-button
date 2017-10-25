@@ -29,6 +29,8 @@ export interface ListView extends mxui.widget._WidgetBase {
         _pageSize: number;
     };
     _showLoadingIcon: () => void;
+    _sourceReload: () => void;
+    _renderData: () => void;
     sequence: (sequence: string[]) => void;
 }
 

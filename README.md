@@ -2,13 +2,11 @@
 [![Dependency Status](https://david-dm.org/mendixlabs/paging-button.svg)](https://david-dm.org/mendixlabs/paging-button)
 [![Dev Dependency Status](https://david-dm.org/mendixlabs/paging-button.svg#info=devDependencies)](https://david-dm.org/mendixlabs/paging-button#info=devDependencies)
 [![codecov](https://codecov.io/gh/mendixlabs/pagination/branch/master/graph/paging-button.svg)](https://codecov.io/gh/mendixlabs/paging-button)
-![badge](https://img.shields.io/badge/mendix-7.1.1-green.svg)
+![badge](https://img.shields.io/badge/mendix-7.7.1-green.svg)
 
 # PAGINATION
 
-Add bootstrap like paging to your list view.
-It supports paging similar to the built-in data grid with some boot strap
-styling.
+Add bootstrap like paging to your list view similar to the built-in data grid. The widget also supports page numbers.
 
 ## Features
 * Add pagination navigation buttons to the list view 
@@ -17,7 +15,11 @@ ie:
   * Last button
   * Next button
   * Previous button
-* Hide unused buttons.
+  * Hide unused buttons.
+  * Page numbers as buttons  
+  * Page numbers with text as buttons
+  * Page text that can be added to pagination in combination with the follow place holders.
+  {firstItem} {lastItem} {totalItems} {currentPageNumber} {totalPages}
 
 ## Dependencies
 Mendix 7.7.1

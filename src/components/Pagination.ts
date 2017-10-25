@@ -38,7 +38,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             pageCount: 0,
             previousIsDisabled: true,
             selectedPageNumber: 1
-
         };
 
         this.firstPageClickAction = this.firstPageClickAction.bind(this);
@@ -122,7 +121,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
-    private createFirstButton(buttonProps?: PageButtonProps) {
+    private createFirstButton(buttonProps?: PageButtonProps): ReactElement<{}> {
         return createElement(PageButton, {
             ...buttonProps,
             buttonType: "firstButton",
@@ -131,7 +130,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
-    private createPreviousButton(buttonProps?: PageButtonProps) {
+    private createPreviousButton(buttonProps?: PageButtonProps): ReactElement<{}> {
         return createElement(PageButton, {
             ...buttonProps,
             buttonType: "previousButton",
@@ -140,7 +139,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
-    private createNextButton(buttonProps?: PageButtonProps) {
+    private createNextButton(buttonProps?: PageButtonProps): ReactElement<{}> {
         return createElement(PageButton, {
             ...buttonProps,
             buttonType: "nextButton",
@@ -149,7 +148,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
-    private createLastButton(buttonProps?: PageButtonProps) {
+    private createLastButton(buttonProps?: PageButtonProps): ReactElement<{}> {
         return createElement(PageButton, {
             ...buttonProps,
             buttonType: "lastButton",
@@ -158,7 +157,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
-    private createMessage(message?: string) {
+    private createMessage(message?: string): ReactElement<{}> {
         message = this.getMessageStatus(message);
 
         return createElement("span", { className: "paging-status" }, message);
@@ -248,7 +247,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             }
         } else {
             leftSide = divider;
-            rightSide = (maxPageButtons - leftSide);
+            rightSide = maxPageButtons - leftSide;
 
             if (this.state.selectedPageNumber > pageCount - divider) {
                 rightSide = pageCount - this.state.selectedPageNumber;
@@ -282,6 +281,8 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                     continue;
                 }
 
+                // If a page is clicked and on the right side of the pagination there exists a page or pages with value
+                // more than max page buttons, Make sure that the second page is a break view
                 if (page === 2) {
                     pageItems.push(createElement(BreakView, {}));
                     breakViewAdded = true;
@@ -343,17 +344,14 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         }
 
         if (message) {
+            const totalPages = offset && offset !== 0 ? Math.ceil(listViewSize / offset) : listViewSize;
+
             return message
                 .replace("{firstItem}", fromValue.toString())
                 .replace("{lastItem}", toValue.toString())
                 .replace("{totalItems}", listViewSize.toString())
                 .replace("{currentPageNumber}", this.state.selectedPageNumber.toString())
-                .replace("{totalPages}",
-                    (
-                        offset && offset !== 0
-                            ? Math.ceil(listViewSize / offset)
-                            : listViewSize
-                    ).toString());
+                .replace("{totalPages}", totalPages.toString());
         }
 
         return this.props.getMessageStatus(fromValue, toValue, listViewSize);

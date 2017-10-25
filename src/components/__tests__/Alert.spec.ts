@@ -4,6 +4,7 @@ import { shallow } from "enzyme";
 import { Alert } from "../Alert";
 
 describe("Alert", () => {
+
     it("renders the structure correctly", () => {
         const message = "This is an error";
         const alert = shallow(createElement(Alert, { bootstrapStyle: "danger", message }));

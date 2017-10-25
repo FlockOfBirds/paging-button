@@ -8,13 +8,8 @@ Object.assign(webpackConfig, {
         "react/lib/ReactContext",
         "react/addons",
         "jsdom",
-        "dojo/_base/declare",
-        "mxui/widget/_WidgetBase",
-        "dijit/registry",
-        "dojo/_base/lang",
-        "dojo/_base/connect",
-        "dojo/aspect"
-    ]
+        /^mxui\/|^mendix\/|^dojo\/|^dijit\//
+    ],
 });
 
 module.exports = function(config) {

@@ -5,6 +5,7 @@ import { PageButton, PageButtonProps } from "../PageButton";
 import * as classNames from "classnames";
 
 describe("PageButton", () => {
+
     describe("with default page style", () => {
         it("renders first button structure correctly", () => {
             const cssClass = "btn mx-button mx-name-paging-first";

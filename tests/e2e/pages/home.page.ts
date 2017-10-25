@@ -3,6 +3,8 @@ class Home {
 
     public get listViewOne() { return browser.element(".mx-name-listView1"); }
 
+    public get resetButton() { return browser.element(".mx-name-listView1"); }
+
     public get nextButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-next"); }
 
     public get firstButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-first"); }
@@ -23,7 +25,11 @@ class Home {
         return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-12 > div > div > span");
     }
 
-    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-30 > div > div > span"); }
+    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-48 > div > div > span"); }
+
+    public tearDownSetUp(): void {
+        this.resetButton.waitForVisible();
+    }
 
     public open(): void {
         browser.url("/p/home");
