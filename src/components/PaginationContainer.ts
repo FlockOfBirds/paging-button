@@ -85,7 +85,6 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 hideUnusedPaging: this.state.hideUnusedPaging,
                 items: this.props.items,
                 listViewSize: this.state.listViewSize,
-                maxPageButtons: this.props.maxPageButtons,
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
                 pagingStyle: this.props.pagingStyle

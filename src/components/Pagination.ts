@@ -8,9 +8,8 @@ import { BreakView } from "./BreakView";
 
 export interface PaginationProps {
     hideUnusedPaging: boolean;
-    items: ItemType;
+    items: ItemType[];
     listViewSize: number;
-    maxPageButtons: number;
     offset: number;
     onClickAction: (offset: number) => void;
     getMessageStatus: (currentOffset: number, offset: number, maxPageSize: number) => string;
@@ -117,7 +116,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             }
 
             if (buttonProps.buttonType === "pageNumberButtons") {
-                return createElement("ul", {}, this.createPageNumberViews());
+                return createElement("ul", {}, this.createPageNumberViews(option.maxPageButtons));
             }
         });
     }
@@ -229,12 +228,11 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.props.onClickAction(currentOffset);
     }
 
-    private createPageNumberViews(): Array<ReactElement<any>> {
+    private createPageNumberViews(maxPageButtons: number): Array<ReactElement<any>> {
         const pageItems: Array<ReactElement<any>> = [];
         const margin = 1;
         let leftSide;
         let rightSide;
-        const maxPageButtons = this.props.maxPageButtons;
         let breakViewAdded = false;
         const divider = Math.ceil(maxPageButtons / 2);
 

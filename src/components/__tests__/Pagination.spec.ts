@@ -3,7 +3,7 @@ import { createElement } from "react";
 
 import { Pagination, PaginationProps } from "../Pagination";
 import { PageButton, PageButtonProps } from "../PageButton";
-import { IconType } from "../../utils/ContainerUtils";
+import { IconType, ItemType } from "../../utils/ContainerUtils";
 import { PageNumberView } from "../PageNumberView";
 import { BreakView } from "../BreakView";
 
@@ -99,8 +99,8 @@ describe("Pagination", () => {
         it("renders the structure with one break view when selected item is less than max page buttons", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,
+                items: [ { item: "pageNumberButtons", maxPageButtons: 7, showIcon: "default", text: "" } ],
                 listViewSize: 32,
-                maxPageButtons: 7,
                 pagingStyle: "custom"
             };
             const pageButtonProps = {
@@ -126,8 +126,8 @@ describe("Pagination", () => {
         it("renders the structure with two break views when page number is more than max page buttons", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,
+                items: [ { item: "pageNumberButtons", maxPageButtons: 7, showIcon: "default", text: "" } ],
                 listViewSize: 20,
-                maxPageButtons: 7,
                 pagingStyle: "custom"
             };
             const pageButtonProps = {
@@ -329,8 +329,8 @@ describe("Pagination", () => {
         it("when a high custom page button 14 is clicked, set page to 14, remove last break view", () => {
             const paginationProps: PaginationProps = {
                 ...defaultProps,
+                items: [ { item: "pageNumberButtons", maxPageButtons: 7, showIcon: "default", text: "" } ],
                 listViewSize: 32,
-                maxPageButtons: 7,
                 onClickAction: jasmine.createSpy("onClick"),
                 pagingStyle: "custom"
             };
@@ -357,8 +357,9 @@ describe("Pagination", () => {
         return `${fromValue} to ${toValue} of ${maxPageSize}`;
     };
 
-    const defaultItemProps = {
+    const defaultItemProps: ItemType = {
         item: "firstButton",
+        maxPageButtons: 7,
         showIcon: "default" as IconType,
         text: ""
     };
@@ -393,11 +394,11 @@ describe("Pagination", () => {
             },
             {
                 ...defaultItemProps,
-                item: "pageNumberButtons"
+                item: "pageNumberButtons",
+                maxPageButtons: 16
             }
         ],
         listViewSize: 32,
-        maxPageButtons: 16,
         offset: 2,
         onClickAction: jasmine.any(Function),
         pagingStyle: "default"
