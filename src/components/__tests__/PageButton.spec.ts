@@ -7,6 +7,7 @@ import * as classNames from "classnames";
 describe("PageButton", () => {
 
     describe("with default page style", () => {
+
         it("renders first button structure correctly", () => {
             const cssClass = "btn mx-button mx-name-paging-first";
             const iconClass = "glyphicon glyphicon-step-backward";
@@ -82,47 +83,41 @@ describe("PageButton", () => {
 
     describe("with custom page style", () => {
 
-        it("renders custom button structure correctly", () => {
+        it("with button caption renders custom button structure correctly", () => {
             const cssClass = "btn mx-button mx-name-paging-first";
             const iconClass = "glyphicon glyphicon-step-backward";
-            const message = "first";
+            const buttonCaption = "first";
 
             const pageButton = shallow(createElement(PageButton, {
+                buttonCaption,
                 buttonType: "firstButton",
-                message,
-                showIcon: "none"
+                showIcon: "default"
             }));
 
             expect(pageButton).toBeElement(
-                createElement("span", { className: classNames("button-text") },
-                    createElement("button", { className: classNames(cssClass, { disabled: false }) },
-                        createElement("span", { className: iconClass }),
-                        createElement("span", { className: "firstButton" },
-                            message
-                        )
+                createElement("button", { className: classNames(cssClass, { disabled: false }) },
+                    createElement("span", { className: iconClass }),
+                    createElement("span", { className: "firstButton" },
+                        buttonCaption
                     )
                 )
             );
         });
 
-        it("renders message structure correctly", () => {
-            const message = "first";
+        it("without button caption renders custom button structure correctly", () => {
+            const cssClass = "btn mx-button mx-name-paging-first";
+            const buttonCaption = "";
 
             const pageButton = shallow(createElement(PageButton, {
-                buttonType: "text",
-                message,
-                showIcon: "none"
+                buttonCaption,
+                buttonType: "firstButton",
+                showIcon: "default"
             }));
 
             expect(pageButton).toBeElement(
-                createElement("span", {
-                        className: classNames("button-text")
-                    },
-                    createElement("button", { className: classNames({ disabled: false }) },
-                        createElement("span", { className: "text" },
-                            message
-                        ),
-                        createElement("span", { className: "" })
+                createElement("button", { className: classNames(cssClass, { disabled: false }) },
+                    createElement("span", { className: classNames("glyphicon glyphicon-step-backward") },
+                        buttonCaption
                     )
                 )
             );

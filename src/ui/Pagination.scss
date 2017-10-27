@@ -8,6 +8,22 @@ $widget-pagination-color-disabled: #999;
         overflow: hidden;
         white-space: nowrap;
 
+        .paging-status {
+            vertical-align: middle;
+            margin-bottom: 0;
+            padding: 0.6em 1em;
+            line-height: 1.42857;
+            border-color: transparent;
+            background-color: transparent;
+            cursor: text;
+        }
+
+        button {
+            span.only-text{
+                font-weight:600;
+            }
+        }
+
         .mx-button,.btn {
             color: #000;
             border-color: transparent;
@@ -25,20 +41,18 @@ $widget-pagination-color-disabled: #999;
             color: $widget-pagination-color-disabled;
         }
 
-        .button-text {
-            button {
-                span{
-                    &.glyphicon{
-                        line-height: inherit;
-                    }
+        button {
+            span{
+                &.glyphicon{
+                    line-height: inherit;
+                }
 
-                    &.nextButton {
-                        margin-right: 4px;
-                    }
+                &.nextButton {
+                    margin-right: 4px;
+                }
 
-                    &.previousButton {
-                        margin-left: 4px;
-                    }
+                &.previousButton {
+                    margin-left: 4px;
                 }
             }
         }

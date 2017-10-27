@@ -3,7 +3,7 @@ import { createElement } from "react";
 
 import { Pagination, PaginationProps } from "../Pagination";
 import { PageButton, PageButtonProps } from "../PageButton";
-import { IconType } from "../../utils/ContainerUtils";
+import { ButtonType, IconType } from "../../utils/ContainerUtils";
 import { PageNumberView } from "../PageNumberView";
 import { BreakView } from "../BreakView";
 
@@ -12,7 +12,7 @@ describe("Pagination", () => {
     describe("when default", () => {
 
         it("renders the structure", () => {
-            const pagination = shallowRenderPagination(defaultProps);
+            const pagination = shallowRenderPagination(defaultStylePaginationProps);
 
             expect(pagination).toBeElement(
                 createElement("div", { className: "pagination visible" },
@@ -23,7 +23,7 @@ describe("Pagination", () => {
 
         it("is not visible when hide un-used property is set", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...defaultStylePaginationProps,
                 hideUnusedPaging: true
             };
 
@@ -38,7 +38,7 @@ describe("Pagination", () => {
 
         it("renders the structure as disabled when list view is empty", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...defaultStylePaginationProps,
                 listViewSize: 0
             };
 
@@ -57,58 +57,20 @@ describe("Pagination", () => {
     describe("when custom", () => {
 
         it("renders the entire structure when the page count is less then maximum number of buttons ", () => {
-            const paginationProps: PaginationProps = {
-                ...defaultProps,
-                pagingStyle: "custom"
-            };
-            const pageButtonProps = {
-                ...defaultPageButtonProps,
-                isDisabled: true,
-                message: "",
-                showIcon: "default" as IconType
-            };
-
-            const pagination = shallowRenderPagination(paginationProps);
+            const pagination = shallowRenderPagination(customStylePaginationProps);
 
             expect(pagination).toBeElement(
                 createElement("div", { className: "pagination visible" },
-                    getCustomPageButtons(pageButtonProps, defaultItemProps)
-                )
-            );
-        });
-
-        it("renders with custom message status", () => {
-            const paginationProps: PaginationProps = {
-                ...defaultProps,
-                pagingStyle: "custom"
-            };
-            const pageButtonProps = {
-                ...defaultPageButtonProps,
-                isDisabled: true,
-                showIcon: "default" as IconType
-            };
-
-            const pagination = shallowRenderPagination(paginationProps);
-
-            expect(pagination).toBeElement(
-                createElement("div", { className: "pagination visible" },
-                    getCustomPageButtons(pageButtonProps, defaultItemProps)
+                    getCustomPageButtons()
                 )
             );
         });
 
         it("renders the structure with one break view when selected item is less than max page buttons", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 listViewSize: 32,
-                maxPageButtons: 7,
-                pagingStyle: "custom"
-            };
-            const pageButtonProps = {
-                ...defaultPageButtonProps,
-                isDisabled: true,
-                message: "",
-                showIcon: "default" as IconType
+                maxPageButtons: 7
             };
 
             const pagination = shallowRenderPagination(paginationProps);
@@ -118,7 +80,7 @@ describe("Pagination", () => {
 
             expect(pagination).toBeElement(
                 createElement("div", { className: "pagination visible" },
-                    getCustomPageButtons(pageButtonProps, defaultItemProps)
+                    getCustomPageButtons()
                 )
             );
             expect(breakViews.length).toBe(1);
@@ -126,16 +88,9 @@ describe("Pagination", () => {
 
         it("renders the structure with two break views when page number is more than max page buttons", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 listViewSize: 20,
-                maxPageButtons: 7,
-                pagingStyle: "custom"
-            };
-            const pageButtonProps = {
-                ...defaultPageButtonProps,
-                isDisabled: true,
-                message: "",
-                showIcon: "default" as IconType
+                maxPageButtons: 7
             };
 
             const pagination = shallowRenderPagination(paginationProps);
@@ -146,7 +101,7 @@ describe("Pagination", () => {
 
             expect(pagination).toBeElement(
                 createElement("div", { className: "pagination visible" },
-                    getCustomPageButtons(pageButtonProps, defaultItemProps)
+                    getCustomPageButtons()
                 )
             );
             expect(breakViews.length).toBe(2);
@@ -154,22 +109,16 @@ describe("Pagination", () => {
 
         it("renders the structure with correct custom message when list view is empty", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 listViewSize: 0,
-                offset: 0,
-                pagingStyle: "custom"
-            };
-            const pageButtonProps = {
-                ...defaultPageButtonProps,
-                isDisabled: true,
-                showIcon: "default" as IconType
+                offset: 0
             };
 
             const pagination = shallowRenderPagination(paginationProps);
             // check if message contains zero
             expect(pagination).toBeElement(
                 createElement("div", { className: "pagination visible" },
-                    getCustomPageButtons(pageButtonProps, pageButtonProps)
+                    getCustomPageButtons()
                 )
             );
         });
@@ -179,7 +128,7 @@ describe("Pagination", () => {
 
         it("when first button is clicked set page to 1", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...defaultStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick")
             };
             const pagination = shallowRenderPagination(paginationProps);
@@ -198,7 +147,7 @@ describe("Pagination", () => {
 
         it("when previous button is clicked and page is 8, set page to 7", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick")
             };
             const pagination = shallowRenderPagination(paginationProps);
@@ -217,7 +166,7 @@ describe("Pagination", () => {
 
         it("when previous button is clicked and page number is at start, disable previous button", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick")
             };
 
@@ -236,7 +185,7 @@ describe("Pagination", () => {
 
         it("when next button is clicked and page is 4, set page to 5", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick")
             };
 
@@ -255,7 +204,7 @@ describe("Pagination", () => {
 
         it("when last button is clicked set page to page count", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick")
             };
 
@@ -274,7 +223,7 @@ describe("Pagination", () => {
 
         it("with non even number of page items, when last button is clicked set page to page count", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 listViewSize: 33,
                 onClickAction: jasmine.createSpy("onClick")
             };
@@ -293,8 +242,8 @@ describe("Pagination", () => {
         });
 
         it("when custom page button 6 is clicked, set page to 6", () => {
-            const paginationProps: PaginationProps = {
-                ...defaultProps,
+            const paginationProps = {
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick"),
                 pagingStyle: "custom"
             };
@@ -302,6 +251,7 @@ describe("Pagination", () => {
             const pagination = shallowRenderPagination(paginationProps);
             const paginationInstance = pagination.instance() as Pagination;
             paginationInstance.setState({ currentOffset: 2, selectedPageNumber: 5 });
+            paginationInstance.componentDidMount();
             const pageNumberButton = pagination.find(PageNumberView).at(5);
             pageNumberButton.simulate("click");
 
@@ -314,7 +264,7 @@ describe("Pagination", () => {
 
         it("when same custom page button 5 is clicked do nothing", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 onClickAction: jasmine.createSpy("onClick"),
                 pagingStyle: "custom"
             };
@@ -331,7 +281,7 @@ describe("Pagination", () => {
 
         it("when a high custom page button 14 is clicked, set page to 14, remove last break view", () => {
             const paginationProps: PaginationProps = {
-                ...defaultProps,
+                ...customStylePaginationProps,
                 listViewSize: 32,
                 maxPageButtons: 7,
                 onClickAction: jasmine.createSpy("onClick"),
@@ -340,6 +290,7 @@ describe("Pagination", () => {
 
             const pagination = shallowRenderPagination(paginationProps);
             const paginationInstance = pagination.instance() as Pagination;
+            paginationInstance.componentDidMount();
             paginationInstance.setState({ currentOffset: 6, selectedPageNumber: 13 });
             const pageNumberButton = pagination.find(PageNumberView).at(13);
             pageNumberButton.simulate("click");
@@ -350,8 +301,8 @@ describe("Pagination", () => {
     });
 
     const shallowRenderPagination = (props: PaginationProps) => shallow(createElement(Pagination, props));
-    const defaultPageButtonProps: PageButtonProps = {
-        buttonType: "firstButton",
+    const defaultPageButtonProps = {
+        buttonType: "firstButton" as ButtonType,
         isDisabled: true,
         onClickAction: jasmine.any(Function)
     };
@@ -361,16 +312,26 @@ describe("Pagination", () => {
     };
 
     const defaultItemProps = {
+        buttonCaption: "",
         item: "firstButton",
-        showIcon: "default" as IconType,
-        text: ""
+        showIcon: "default" as IconType
     };
 
-    const defaultProps: PaginationProps = {
+    const defaultStylePaginationProps: PaginationProps = {
         getMessageStatus: (fromValue: number, toValue: number, maxPageSize: number) => {
             return getMessageStatus(fromValue, toValue, maxPageSize);
         },
         hideUnusedPaging: false,
+        items: [],
+        listViewSize: 32,
+        maxPageButtons: 16,
+        offset: 2,
+        onClickAction: jasmine.any(Function),
+        pagingStyle: "default"
+    };
+
+    const customStylePaginationProps: any = {
+        ... defaultStylePaginationProps,
         items: [
             {
                 ...defaultItemProps,
@@ -399,11 +360,7 @@ describe("Pagination", () => {
                 item: "pageNumberButtons"
             }
         ],
-        listViewSize: 32,
-        maxPageButtons: 16,
-        offset: 2,
-        onClickAction: jasmine.any(Function),
-        pagingStyle: "default"
+        pagingStyle: "custom"
     };
 
     const createButton = (buttonProps?: PageButtonProps) => createElement(PageButton, {
@@ -413,17 +370,25 @@ describe("Pagination", () => {
     const getDefaultPageButtons = (pageButtonProps: PageButtonProps) => [
         createButton({ ...pageButtonProps, buttonType: "firstButton" }),
         createButton({ ...pageButtonProps, buttonType: "previousButton" }),
-        createButton({ ...pageButtonProps, buttonType: "text" }),
+        createElement("span", { className: "paging-status" }, "From 1 to 2 of 32, page 1 of pages 16"),
         createButton({ ...pageButtonProps, buttonType: "nextButton" }),
         createButton({ ...pageButtonProps, buttonType: "lastButton" })
     ];
 
-    const getCustomPageButtons = (leftPageButtonProps: PageButtonProps, rightPageButtonProps: PageButtonProps) => [
-        createButton({ ...leftPageButtonProps, buttonType: "firstButton", message: "" }),
-        createButton({ ...leftPageButtonProps, buttonType: "previousButton", message: "" }),
-        createButton({ ...leftPageButtonProps, buttonType: "text", message: "From 1 to 2 of 32, page 1 of pages 16" }),
-        createButton({ ...rightPageButtonProps, buttonType: "nextButton", message: "" }),
-        createButton({ ...rightPageButtonProps, buttonType: "lastButton", message: "" }),
-        createButton({ ...rightPageButtonProps, buttonType: "pageNumberButtons" })
+    const getCustomPageButtons = () => {
+        const props = {
+            buttonCaption: "",
+            isDisabled: true,
+            onClickAction: jasmine.any(Function),
+            showIcon: "default" as IconType
+        };
+        return [
+        createButton({ ...props, buttonType: "firstButton" }),
+        createButton({ ...props, buttonType: "previousButton" }),
+        createElement("span", { className: "paging-status" }, "From 1 to 2 of 32, page 1 of pages 16"),
+        createButton({ ...props, buttonType: "nextButton" }),
+        createButton({ ...props, buttonType: "lastButton" }),
+        createButton({ ...props, buttonType: "pageNumberButtons" })
     ];
+    };
 });

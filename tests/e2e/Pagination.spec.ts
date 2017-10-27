@@ -1,18 +1,18 @@
 import page from "./pages/home.page";
 import indexPage from "./pages/index.page";
 
-const testValueOne = "Color 2";
-const testValueFive = "Color 22";
-const testValueSeven = "Color 24";
-const testValueThirteen = "Color 26";
-const testLastItemValue = "Color P 12";
+const testValueOne = "Color 1";
+const testValueFive = "Color 5";
+const testValueSeven = "Color 7";
+const testValueThird = "Color 3";
+const testLastItemValue = "Color 15";
 
 describe("Pagination", () => {
 
     beforeAll(() => {
         indexPage.tearDownSetUp();
         // wait for the records to be populated
-        browser.timeouts("implicit", 10 * 1000);
+        browser.timeouts("implicit", 20 * 1000);
     });
 
     it("when next button is clicked list view should have those items", () => {
@@ -26,10 +26,11 @@ describe("Pagination", () => {
         expect(itemValueOne).toContain(testValueOne);
 
         page.nextButton.click();
-        page.nextButton.click();
         page.listViewThirdItem.waitForVisible();
+        page.nextButton.click();
+        page.listViewFifthItem.waitForVisible();
 
-        const itemValueFive = page.listViewThirdItem.getHTML();
+        const itemValueFive = page.listViewFifthItem.getHTML();
         expect(itemValueFive).toContain(testValueFive);
     });
 
@@ -39,10 +40,7 @@ describe("Pagination", () => {
         page.nextButton.waitForVisible();
         page.lastButton.waitForVisible();
 
-        page.nextButton.click();
-        page.nextButton.click();
         page.lastButton.click();
-        page.listViewLastItem.waitForVisible();
 
         const lastItemValue = page.listViewLastItem.getHTML();
         expect(lastItemValue).toContain(testLastItemValue);
@@ -54,10 +52,9 @@ describe("Pagination", () => {
         page.nextButton.waitForVisible();
         page.firstButton.waitForVisible();
         page.listViewOne.waitForVisible();
-        page.listViewFirstItem.waitForVisible();
+        page.nextButton.click();
+        page.listViewThirdItem.waitForVisible();
 
-        page.nextButton.click();
-        page.nextButton.click();
         page.firstButton.click();
         page.listViewFirstItem.waitForVisible();
 
@@ -72,9 +69,13 @@ describe("Pagination", () => {
         page.previousButton.waitForVisible();
 
         page.nextButton.click();
+        page.listViewThirdItem.waitForVisible();
         page.nextButton.click();
+        page.listViewFifthItem.waitForVisible();
         page.nextButton.click();
+        page.listViewSeventhItem.waitForVisible();
         page.nextButton.click();
+        page.listViewNinethItem.waitForVisible();
         page.previousButton.click();
         page.listViewSeventhItem.waitForVisible();
 
@@ -84,11 +85,11 @@ describe("Pagination", () => {
 
     it("when custom button is clicked list view should show item on the custom page ", () => {
         page.open();
-        page.customButtonFive.waitForVisible();
-        page.customButtonFive.click();
-        page.listViewEighthItem.waitForVisible();
+        page.customButtonTwo.waitForVisible();
+        page.customButtonTwo.click();
+        page.listViewThirdItem.waitForVisible();
 
-        const thirteenthItemValue = page.listViewEighthItem.getHTML();
-        expect(thirteenthItemValue).toContain(testValueThirteen);
+        const thirdItemValue = page.listViewThirdItem.getHTML();
+        expect(thirdItemValue).toContain(testValueThird);
     });
 });

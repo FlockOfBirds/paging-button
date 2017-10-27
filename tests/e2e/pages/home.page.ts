@@ -3,33 +3,27 @@ class Home {
 
     public get listViewOne() { return browser.element(".mx-name-listView1"); }
 
-    public get resetButton() { return browser.element(".mx-name-listView1"); }
-
     public get nextButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-next"); }
 
     public get firstButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-first"); }
 
     public get previousButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-previous"); }
 
-    public get customButtonFive() { return browser.element(".mx-name-pagination9 > div > ul > li:nth-child(5)"); }
+    public get customButtonTwo() { return browser.element(".mx-name-pagination9 > div > ul > li:nth-child(2)"); }
 
     public get lastButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-last"); }
 
     public get listViewFirstItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-0 > div > div > span"); }
 
-    public get listViewThirdItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-4 > div > div > span"); }
+    public get listViewThirdItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-2 > div > div > span"); }
+
+    public get listViewFifthItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-4 > div > div > span"); }
 
     public get listViewSeventhItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-6 > div > div > span"); }
 
-    public get listViewEighthItem() {
-        return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-8 > div > div > span");
-    }
+    public get listViewNinethItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-8 > div > div > span"); }
 
     public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-14 > div > div > span"); }
-
-    public tearDownSetUp(): void {
-        this.resetButton.waitForVisible();
-    }
 
     public open(): void {
         browser.url("/p/home");

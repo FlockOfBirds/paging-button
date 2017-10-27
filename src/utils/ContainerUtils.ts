@@ -1,10 +1,11 @@
 export type PageStyleType = "custom" | "default";
 
-export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "text" | "pageNumberButtons";
+export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "buttonCaption" | "text" | "pageNumberButtons";
 
 export type IconType = "default" | "none";
 
 export type ItemType = Array<{
+    buttonCaption: string,
     item: ButtonType,
     showIcon: IconType,
     text: string

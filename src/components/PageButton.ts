@@ -8,14 +8,16 @@ export interface PageButtonProps {
     showIcon?: IconType;
     onClickAction?: () => void;
     isDisabled?: boolean;
-    message?: string;
+    buttonCaption?: string;
 }
 
 export const PageButton: SFC<PageButtonProps> = (props) => {
     let iconClass = "";
     let cssClass = "";
     const disabledClass = { disabled: props.isDisabled };
-    const onClick = !props.isDisabled ? props.onClickAction : () => { return; };
+    const onClick = !props.isDisabled ? props.onClickAction : () => {
+        return;
+    };
 
     if (props.buttonType === "firstButton") {
 
@@ -39,39 +41,48 @@ export const PageButton: SFC<PageButtonProps> = (props) => {
     }
 
     if (props.showIcon === "default") {
+        if (!props.buttonCaption) {
+            return createElement("button", {
+                    className: classNames(cssClass, disabledClass),
+                    onClick
+                },
+                createElement("span", { className: iconClass })
+            );
+        } else {
+            if (props.buttonType === "firstButton" || props.buttonType === "previousButton") {
+                return createElement("button", {
+                        className: classNames(cssClass, disabledClass),
+                        onClick
+                    },
+                    createElement("span", { className: iconClass }),
+                    createElement("span", { className: props.buttonType },
+                        props.buttonCaption
+                    )
+                );
+            }
+
+            return createElement("button", {
+                    className: classNames(cssClass, disabledClass),
+                    onClick
+                },
+                createElement("span", { className: props.buttonType },
+                    props.buttonCaption
+                ),
+                createElement("span", { className: iconClass })
+            );
+        }
+    } else if (props.showIcon === "none" && props.buttonCaption) {
         return createElement("button", {
                 className: classNames(cssClass, disabledClass),
                 onClick
             },
-            createElement("span", { className: iconClass })
-        );
-    }
-
-    if (props.buttonType === "firstButton" || props.buttonType === "previousButton") {
-        return createElement("span", {
-                className: classNames("button-text"),
-                onClick
-            },
-            createElement("button", { className: classNames(cssClass, disabledClass) },
-                createElement("span", { className: iconClass }),
-                createElement("span", { className: props.buttonType },
-                    props.message
-                )
+            createElement("span", { className: classNames(props.buttonType, "") },
+                props.buttonCaption
             )
         );
+    } else {
+        return null;
     }
-
-    return createElement("span", {
-            className: classNames("button-text"),
-            onClick
-        },
-        createElement("button", { className: classNames(cssClass, disabledClass) },
-            createElement("span", { className: props.buttonType },
-                props.message
-            ),
-            createElement("span", { className: iconClass })
-        )
-    );
 };
 
 PageButton.displayName = "PageButton";

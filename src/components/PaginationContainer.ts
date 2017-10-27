@@ -123,7 +123,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                     dataSource = targetListView._datasource;
                     listViewSize = dataSource._setSize;
                     offset = dataSource._pageSize;
-                    hideUnusedPaging = (offset >= dataSource._setSize) && this.props.hideUnusedPaging;
+                    hideUnusedPaging = ((offset >= dataSource._setSize) || (offset === 0)) && this.props.hideUnusedPaging;
 
                     dojoAspect.after(targetListView, "_onLoad", () => {
                         if (this.state.targetListView) {

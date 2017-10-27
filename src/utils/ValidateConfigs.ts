@@ -28,7 +28,7 @@ export class ValidateConfigs {
         return !!(targetListView
             && targetListView._datasource
             && targetListView._datasource.setOffset
-            && targetListView._datasource._pageSize
+            && targetListView._datasource._pageSize !== undefined
             && targetListView._sourceReload
             && targetListView._renderData
             && targetListView._datasource._setSize

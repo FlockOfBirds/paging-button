@@ -42,13 +42,18 @@
                     </enumerationValues>
                 </property>
                 <property key="text" type="translatableString" required="false">
-                    <caption>Text</caption>
+                    <caption>Text with placeholder</caption>
                     <category>General</category>
                     <description>Use placeholder: {firstItem} {lastItem} {totalItems} {currentPageNumber} {totalPages}</description>
                     <translations>
                         <translation lang="en_US">{firstItem} to {lastItem} of {totalItems}</translation>
                         <translation lang="nl_NL">{firstItem} tot {lastItem} van {totalItems}</translation>
                     </translations>
+                </property>
+                <property key="buttonCaption" type="string" required="false">
+                    <caption>Button caption</caption>
+                    <category>General</category>
+                    <description></description>
                 </property>
                 <property key="showIcon" type="enumeration" defaultValue="default">
                     <caption>Show icon</caption>
