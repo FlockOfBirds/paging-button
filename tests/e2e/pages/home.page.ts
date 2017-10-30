@@ -23,7 +23,7 @@ class Home {
 
     public get listViewNinethItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-8 > div > div > span"); }
 
-    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-14 > div > div > span"); }
+    public get listViewLastItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-18 > div > div > span"); }
 
     public open(): void {
         browser.url("/p/home");

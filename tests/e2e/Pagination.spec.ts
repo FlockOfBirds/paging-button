@@ -5,7 +5,7 @@ const testValueOne = "Color 1";
 const testValueFive = "Color 5";
 const testValueSeven = "Color 7";
 const testValueThird = "Color 3";
-const testLastItemValue = "Color 15";
+const testLastItemValue = "Color 19";
 
 describe("Pagination", () => {
 

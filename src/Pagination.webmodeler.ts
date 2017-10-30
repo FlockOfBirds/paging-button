@@ -1,14 +1,10 @@
 import { Component, createElement } from "react";
 import { findDOMNode } from "react-dom";
 
-import { WrapperProps, findTargetNode } from "./utils/ContainerUtils";
+import { ModelerProps, WrapperProps, findTargetNode } from "./utils/ContainerUtils";
 import { Pagination } from "./components/Pagination";
 import { ValidateConfigs } from "./utils/ValidateConfigs";
 import { Alert } from "./components/Alert";
-
-type VisibilityMap = {
-    [ P in keyof WrapperProps ]: boolean;
-};
 
 interface PaginationWebModelerState {
     findingListViewWidget: boolean;
@@ -39,8 +35,7 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
                 getMessageStatus: () => "[2 to 10 of 50]",
                 hideUnusedPaging: false,
                 items: this.props.items,
-                listViewSize: 10,
-                maxPageButtons: this.props.maxPageButtons,
+                listViewSize: 20,
                 offset: 2,
                 onClickAction: () => {
                     return;
@@ -87,9 +82,14 @@ export class preview extends Component<WrapperProps, PaginationWebModelerState> 
     }
 }
 
-export function getVisibleProperties(valueMap: WrapperProps, visibilityMap: VisibilityMap) {
+export function getVisibleProperties(valueMap: ModelerProps, visibilityMap: any) {
     if (valueMap.pagingStyle === "default") {
         visibilityMap.items = false;
+    } else {
+        valueMap.items.forEach((item, index) => {
+            visibilityMap.items[index].showIcon = item.item !== "text";
+            visibilityMap.items[index].maxPageButtons = item.item === "pageNumberButtons";
+        });
     }
     return visibilityMap;
 }

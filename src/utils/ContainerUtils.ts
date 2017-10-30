@@ -4,22 +4,26 @@ export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previous
 
 export type IconType = "default" | "none";
 
-export type ItemType = Array<{
-    buttonCaption: string,
-    item: ButtonType,
-    showIcon: IconType,
-    text: string
-}>;
-
-export interface WrapperProps {
-    "class"?: string;
-    caption: string;
-    friendlyId: string;
-    hideUnusedPaging: boolean;
-    items: ItemType;
+export interface ItemType {
+    buttonCaption: string;
+    item: ButtonType;
     maxPageButtons: number;
-    mxform: mxui.lib.form._FormBase;
+    showIcon: IconType;
+    text: string;
+}
+
+export interface ModelerProps {
+    caption: string;
+    hideUnusedPaging: boolean;
+    items: ItemType[];
+    maxPageButtons: number;
     pagingStyle: PageStyleType;
+}
+
+export interface WrapperProps extends ModelerProps {
+    "class"?: string;
+    friendlyId: string;
+    mxform: mxui.lib.form._FormBase;
     style: string;
 }
 

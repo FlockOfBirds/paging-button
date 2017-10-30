@@ -69,8 +69,7 @@ describe("Pagination", () => {
         it("renders the structure with one break view when selected item is less than max page buttons", () => {
             const paginationProps: PaginationProps = {
                 ...customStylePaginationProps,
-                listViewSize: 32,
-                maxPageButtons: 7
+                listViewSize: 32
             };
 
             const pagination = shallowRenderPagination(paginationProps);
@@ -244,13 +243,11 @@ describe("Pagination", () => {
         it("when custom page button 6 is clicked, set page to 6", () => {
             const paginationProps = {
                 ...customStylePaginationProps,
-                onClickAction: jasmine.createSpy("onClick"),
-                pagingStyle: "custom"
+                onClickAction: jasmine.createSpy("onClick")
             };
 
             const pagination = shallowRenderPagination(paginationProps);
             const paginationInstance = pagination.instance() as Pagination;
-            paginationInstance.setState({ currentOffset: 2, selectedPageNumber: 5 });
             paginationInstance.componentDidMount();
             const pageNumberButton = pagination.find(PageNumberView).at(5);
             pageNumberButton.simulate("click");
@@ -265,8 +262,7 @@ describe("Pagination", () => {
         it("when same custom page button 5 is clicked do nothing", () => {
             const paginationProps: PaginationProps = {
                 ...customStylePaginationProps,
-                onClickAction: jasmine.createSpy("onClick"),
-                pagingStyle: "custom"
+                onClickAction: jasmine.createSpy("onClick")
             };
 
             const pagination = shallowRenderPagination(paginationProps);
@@ -284,8 +280,7 @@ describe("Pagination", () => {
                 ...customStylePaginationProps,
                 listViewSize: 32,
                 maxPageButtons: 7,
-                onClickAction: jasmine.createSpy("onClick"),
-                pagingStyle: "custom"
+                onClickAction: jasmine.createSpy("onClick")
             };
 
             const pagination = shallowRenderPagination(paginationProps);
@@ -311,9 +306,10 @@ describe("Pagination", () => {
         return `${fromValue} to ${toValue} of ${maxPageSize}`;
     };
 
-    const defaultItemProps = {
+    const itemProps = {
         buttonCaption: "",
         item: "firstButton",
+        maxPageButtons: 7,
         showIcon: "default" as IconType
     };
 
@@ -324,7 +320,6 @@ describe("Pagination", () => {
         hideUnusedPaging: false,
         items: [],
         listViewSize: 32,
-        maxPageButtons: 16,
         offset: 2,
         onClickAction: jasmine.any(Function),
         pagingStyle: "default"
@@ -334,30 +329,31 @@ describe("Pagination", () => {
         ... defaultStylePaginationProps,
         items: [
             {
-                ...defaultItemProps,
+                ...itemProps,
                 item: "firstButton"
             },
             {
-                ...defaultItemProps,
+                ...itemProps,
                 item: "previousButton"
             },
             {
-                ...defaultItemProps,
+                ...itemProps,
                 item: "text",
                 showIcon: "none",
                 text: "From {firstItem} to {lastItem} of {totalItems}, page {currentPageNumber} of pages {totalPages}"
             },
             {
-                ...defaultItemProps,
+                ...itemProps,
                 item: "nextButton"
             },
             {
-                ...defaultItemProps,
+                ...itemProps,
                 item: "lastButton"
             },
             {
-                ...defaultItemProps,
-                item: "pageNumberButtons"
+                ...itemProps,
+                item: "pageNumberButtons",
+                maxPageButtons: 7
             }
         ],
         pagingStyle: "custom"

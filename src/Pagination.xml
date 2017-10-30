@@ -18,11 +18,6 @@
                 <enumerationValue key="custom">Page number buttons</enumerationValue>
             </enumerationValues>
         </property>
-        <property key="maxPageButtons" type="integer" defaultValue="7">
-            <caption>Max page button</caption>
-            <category>Appearance</category>
-            <description></description>
-        </property>
         <property key="items" type="object" isList="true" required="false">
             <caption>Items</caption>
             <category>Custom</category>
@@ -63,6 +58,11 @@
                         <enumerationValue key="default">Default</enumerationValue>
                         <enumerationValue key="none">None</enumerationValue>
                     </enumerationValues>
+                </property>
+                <property key="maxPageButtons" type="integer" defaultValue="7">
+                    <caption>Max page button</caption>
+                    <category>General</category>
+                    <description>Minimal value 7</description>
                 </property>
             </properties>
         </property>
