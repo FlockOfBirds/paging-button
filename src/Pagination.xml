@@ -15,7 +15,8 @@
             <description>Default renders like the grid pagination</description>
             <enumerationValues>
                 <enumerationValue key="default">Default</enumerationValue>
-                <enumerationValue key="custom">Page number buttons</enumerationValue>
+                <enumerationValue key="pageNumberButtons">Page number buttons </enumerationValue>
+                <enumerationValue key="custom">Custom</enumerationValue>
             </enumerationValues>
         </property>
         <property key="items" type="object" isList="true" required="false">

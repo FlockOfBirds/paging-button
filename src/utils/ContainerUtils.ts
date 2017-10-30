@@ -1,4 +1,4 @@
-export type PageStyleType = "custom" | "default";
+export type PageStyleType = "custom" | "default" | "pageNumberButtons";
 
 export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previousButton" | "buttonCaption" | "text" | "pageNumberButtons";
 

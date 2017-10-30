@@ -46,14 +46,14 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.getMessageStatus = this.getMessageStatus.bind(this);
         this.createPageNumberViews = this.createPageNumberViews.bind(this);
         this.handleSelectedPage = this.handleSelectedPage.bind(this);
+        this.renderPagination = this.renderPagination.bind(this);
+
     }
 
     render() {
         return createElement("div",
             { className: classNames("pagination", `${this.state.isVisible ? "visible" : "hidden"}`) },
-            this.props.pagingStyle === "default"
-                ? this.renderDefault()
-                : this.renderCustom()
+            this.renderPagination()
         );
     }
 
@@ -76,6 +76,21 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         });
     }
 
+    private renderPagination(): Array<ReactElement<{}>> {
+        if (this.props.pagingStyle === "default") {
+
+            return this.renderDefault();
+
+        } else if (this.props.pagingStyle === "pageNumberButtons") {
+
+            return [ this.createPageNumberViews(7) ];
+
+        } else {
+
+            return this.renderCustom();
+        }
+    }
+
     private renderDefault(): Array<ReactElement<{}>> {
         return [
             this.createFirstButton(),
@@ -86,7 +101,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         ];
     }
 
-    private renderCustom() {
+    private renderCustom(): Array<ReactElement<{}>> {
         return this.props.items.map(option => {
             const buttonProps = {
                 buttonCaption: option.buttonCaption,
@@ -116,9 +131,9 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             }
 
             if (buttonProps.buttonType === "pageNumberButtons") {
-                return createElement("ul", {}, this.createPageNumberViews(option.maxPageButtons));
+                return this.createPageNumberViews(option.maxPageButtons);
             }
-        });
+        }) as Array<ReactElement<{}>>;
     }
 
     private createFirstButton(buttonProps?: PageButtonProps): ReactElement<{}> {
@@ -228,7 +243,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.props.onClickAction(currentOffset);
     }
 
-    private createPageNumberViews(maxPageButtons: number): Array<ReactElement<any>> {
+    private createPageNumberViews(maxPageButtons: number): ReactElement<{}> {
         const pageItems: Array<ReactElement<any>> = [];
         const margin = 1;
         let leftSide;
@@ -270,7 +285,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                     }
                     if (breakViewAdded) {
                         breakViewAdded = false;
-                    }else {
+                    } else {
                         pageItems.push(this.getPageNumberView(page));
                     }
                     continue;
@@ -290,7 +305,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             }
         }
 
-        return pageItems;
+        return createElement("ul", {}, pageItems);
     }
 
     private getPageNumberView(pageNumber: number) {
