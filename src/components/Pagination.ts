@@ -265,7 +265,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                     continue;
                 }
 
-                if ((page > this.state.selectedPageNumber - leftSide) && (page < this.state.selectedPageNumber + rightSide)) {
+                if ((page - 1 > this.state.selectedPageNumber - leftSide) && (page < this.state.selectedPageNumber + rightSide)) {
                     if (this.state.selectedPageNumber + rightSide >= this.state.pageCount) {
                         pageItems.push(this.getPageNumberView(page));
                         continue;
@@ -283,11 +283,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 if (page === 2) {
                     pageItems.push(createElement(BreakView, {}));
                     breakViewAdded = true;
-                    continue;
-                }
-
-                if (this.state.selectedPageNumber <= leftSide && page === maxPageButtons) {
-                    pageItems.push(this.getPageNumberView(page));
                     continue;
                 }
 
