@@ -38,7 +38,6 @@ interface ValidateProps {
 export default class PaginationContainer extends Component<WrapperProps, PaginationContainerState> {
     private navigationHandler: object;
     private listListViewHeight: number;
-    private originalListListViewHeight: string | null;
 
     constructor(props: WrapperProps) {
         super(props);
@@ -88,9 +87,9 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         this.showLoadMoreButton(targetNode);
     }
 
-    private getTargetNode() {
+    private getTargetNode(): HTMLElement {
         const queryNode = findDOMNode(this) as HTMLElement;
-        return findTargetNode(queryNode);
+        return findTargetNode(queryNode) as HTMLElement;
     }
 
     private renderPageButton(): ReactElement<PaginationProps> | null {
@@ -134,9 +133,14 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
 
                     dojoAspect.after(targetListView, "_onLoad", () => {
                         if (this.state.targetListView) {
+                            const listViewHTML = this.getTargetNode();
+                            this.setListViewListHeight(listViewHTML);
+
                             this.setState({
                                 listViewSize: this.state.targetListView._datasource._setSize,
                                 offset,
+                                publishedOffset: 0,
+                                publishedPageNumber: 1,
                                 updateSource: "other"
                             });
                         }
@@ -192,13 +196,13 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
     private showLoadMoreButton(targetNode?: HTMLElement | null) {
         if (targetNode) {
             const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
+            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
 
             if (buttonNode) {
                 buttonNode.classList.remove("widget-pagination-hide-load-more");
             }
 
-            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
-            listNode.style.height = this.originalListListViewHeight;
+            listNode.style.removeProperty("height");
         }
     }
 
@@ -206,9 +210,8 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         const { targetListView, targetNode, validationPassed } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
+            this.setListViewListHeight(targetNode);
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
-            this.originalListListViewHeight = listNode.style.height;
-            listNode.style.height = `${this.listListViewHeight}px`;
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
@@ -221,5 +224,10 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         if (this.state.targetListView) {
             dojoTopic.publish(this.state.targetListView.friendlyId, [ offSet, pageNumber ]);
         }
+    }
+
+    private setListViewListHeight(targetNode: HTMLElement) {
+        const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+        listNode.style.height = `${this.listListViewHeight}px`;
     }
 }
