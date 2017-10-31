@@ -51,11 +51,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         this.createPageNumberViews = this.createPageNumberViews.bind(this);
         this.renderPagination = this.renderPagination.bind(this);
         this.renderDefault = this.renderDefault.bind(this);
-        this.createMessage = this.createMessage.bind(this);
-        this.createFirstButton = this.createFirstButton.bind(this);
-        this.createPreviousButton = this.createPreviousButton.bind(this);
-        this.createNextButton = this.createNextButton.bind(this);
-        this.createLastButton = this.createLastButton.bind(this);
     }
 
     render() {
@@ -401,10 +396,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
     }
 
     static getShowIcon(buttonProps?: PageButtonProps): IconType {
-        if (!buttonProps) {
-            return "default";
-        }
-
-        return buttonProps.showIcon as IconType;
+        return buttonProps ? buttonProps.showIcon as IconType : "default";
     }
 }

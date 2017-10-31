@@ -207,14 +207,12 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
 
         if (targetListView && targetNode && validationPassed) {
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
-
             this.originalListListViewHeight = listNode.style.height;
             listNode.style.height = `${this.listListViewHeight}px`;
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
             targetListView.sequence([ "_sourceReload", "_renderData" ]);
-
             this.publishOffsetUpdate(offSet, pageNumber);
         }
     }
