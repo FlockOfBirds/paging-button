@@ -28,11 +28,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mendixlabs/pagination"
+    "url": "https://github.com/mendixlabs/paging-button"
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/mendixlabs/pagination/issues"
+    "url": "https://github.com/mendixlabs/paging-button/issues"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
@@ -95,8 +95,8 @@
     "wdio-selenium-standalone-service": "0.0.9",
     "wdio-spec-reporter": "^0.1.2",
     "webdriverio": "^4.8.0",
-    "webpack": "^3.5.6",
-    "webpack-dev-server": "^2.8.1",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.8.2",
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {

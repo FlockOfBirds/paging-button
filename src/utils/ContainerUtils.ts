@@ -4,6 +4,8 @@ export type ButtonType = "firstButton" | "lastButton" | "nextButton" | "previous
 
 export type IconType = "default" | "none";
 
+export type UpdateSourceType = "multiple" | "other";
+
 export interface ItemType {
     buttonCaption: string;
     item: ButtonType;
@@ -37,6 +39,7 @@ export interface ListView extends mxui.widget._WidgetBase {
     _sourceReload: () => void;
     _renderData: () => void;
     sequence: (sequence: string[]) => void;
+    friendlyId: string;
 }
 
 export const parseStyle = (style = ""): { [key: string]: string } => {

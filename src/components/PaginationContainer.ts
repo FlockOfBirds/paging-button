@@ -4,8 +4,9 @@ import * as dijitRegistry from "dijit/registry";
 import * as classNames from "classnames";
 import * as dojoConnect from "dojo/_base/connect";
 import * as dojoAspect from "dojo/aspect";
+import * as dojoTopic from "dojo/topic";
 
-import { ListView, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
+import { ListView, UpdateSourceType, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
 import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "../utils/ValidateConfigs";
 import { Alert } from "./Alert";
@@ -18,8 +19,11 @@ interface PaginationContainerState {
     message: string;
     offset: number;
     hideUnusedPaging: boolean;
+    publishedOffset?: number;
+    publishedPageNumber?: number;
     targetListView?: ListView | null;
     targetNode?: HTMLElement | null;
+    updateSource?: UpdateSourceType;
     validationPassed?: boolean;
 }
 
@@ -34,7 +38,7 @@ interface ValidateProps {
 export default class PaginationContainer extends Component<WrapperProps, PaginationContainerState> {
     private navigationHandler: object;
     private listListViewHeight: number;
-    private originlListListViewHeight: string | null;
+    private originalListListViewHeight: string | null;
 
     constructor(props: WrapperProps) {
         super(props);
@@ -48,6 +52,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         };
 
         this.updateListView = this.updateListView.bind(this);
+        this.publishOffsetUpdate = this.publishOffsetUpdate.bind(this);
         this.findListView = this.findListView.bind(this);
         this.navigationHandler = dojoConnect.connect(props.mxform, "onNavigation", this , this.findListView);
     }
@@ -97,7 +102,10 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                 listViewSize: this.state.listViewSize,
                 offset: this.state.offset,
                 onClickAction: this.updateListView,
-                pagingStyle: this.props.pagingStyle
+                pagingStyle: this.props.pagingStyle,
+                publishedOffset: this.state.publishedOffset,
+                publishedPageNumber: this.state.publishedPageNumber,
+                updateSource: this.state.updateSource
             });
         }
 
@@ -128,7 +136,18 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                         if (this.state.targetListView) {
                             this.setState({
                                 listViewSize: this.state.targetListView._datasource._setSize,
-                                offset
+                                offset,
+                                updateSource: "other"
+                            });
+                        }
+                    });
+
+                    dojoTopic.subscribe(targetListView.friendlyId, (message: number[]) => {
+                        if (this.state.targetListView) {
+                            this.setState({
+                                publishedOffset: message[0],
+                                publishedPageNumber: message[1],
+                                updateSource: "multiple"
                             });
                         }
                     });
@@ -179,22 +198,30 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
             }
 
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
-            listNode.style.height = this.originlListListViewHeight;
+            listNode.style.height = this.originalListListViewHeight;
         }
     }
 
-    private updateListView(offSet: number) {
+    private updateListView(offSet: number, pageNumber: number) {
         const { targetListView, targetNode, validationPassed } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
             const listNode = targetNode.querySelector("ul") as HTMLUListElement;
 
-            this.originlListListViewHeight = listNode.style.height;
+            this.originalListListViewHeight = listNode.style.height;
             listNode.style.height = `${this.listListViewHeight}px`;
             listNode.innerHTML = "";
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
             targetListView.sequence([ "_sourceReload", "_renderData" ]);
+
+            this.publishOffsetUpdate(offSet, pageNumber);
+        }
+    }
+
+    private publishOffsetUpdate(offSet: number, pageNumber: number) {
+        if (this.state.targetListView) {
+            dojoTopic.publish(this.state.targetListView.friendlyId, [ offSet, pageNumber ]);
         }
     }
 }
