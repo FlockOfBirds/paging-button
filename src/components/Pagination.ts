@@ -85,7 +85,9 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
         if (nextProps.updateSource === "other") {
             this.setState({
                 currentOffset: 0,
+                nextIsDisabled: (currentOffset + offset) >= listViewSize,
                 pageCount,
+                previousIsDisabled: currentOffset <= 0,
                 selectedPageNumber: 1
             });
         } else {

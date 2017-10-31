@@ -299,7 +299,8 @@ describe("Pagination", () => {
     const defaultPageButtonProps = {
         buttonType: "firstButton" as ButtonType,
         isDisabled: true,
-        onClickAction: jasmine.any(Function)
+        onClickAction: jasmine.any(Function),
+        showIcon: "default" as IconType
     };
 
     const getMessageStatus = (fromValue: number, toValue: number, maxPageSize: number): string => {
