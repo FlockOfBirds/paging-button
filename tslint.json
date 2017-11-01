@@ -10,10 +10,7 @@
       "check-space"
     ],
     "eofline": true,
-    "indent": [
-      true,
-      "tab"
-    ],
+    "indent": [ true, "spaces" ],
     "member-ordering": [
       true,
       "variables-before-functions"
@@ -145,7 +142,8 @@
       150
     ],
     "arrow-parens": false,
-    "no-namespace": false
+    "no-namespace": false,
+    "no-implicit-dependencies": false
   },
   "jsRules": {
     "trailing-comma": [

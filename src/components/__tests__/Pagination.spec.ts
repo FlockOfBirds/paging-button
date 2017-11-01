@@ -1,11 +1,14 @@
-import { shallow } from "enzyme";
 import { createElement } from "react";
+import { configure, shallow } from "enzyme";
+import Adapter = require("enzyme-adapter-react-16");
 
 import { Pagination, PaginationProps } from "../Pagination";
 import { PageButton, PageButtonProps } from "../PageButton";
 import { ButtonType, IconType } from "../../utils/ContainerUtils";
 import { PageNumberView } from "../PageNumberView";
 import { BreakView } from "../BreakView";
+
+configure({ adapter: new Adapter() });
 
 describe("Pagination", () => {
 

@@ -1,8 +1,11 @@
 import { createElement } from "react";
-import { shallow } from "enzyme";
+import { configure, shallow } from "enzyme";
+import Adapter = require("enzyme-adapter-react-16");
+import * as classNames from "classnames";
 
 import { PageNumberView } from "../PageNumberView";
-import * as classNames from "classnames";
+
+configure({ adapter: new Adapter() });
 
 describe("PageNumberView", () => {
 
