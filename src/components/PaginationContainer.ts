@@ -196,7 +196,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
     private showLoadMoreButton(targetNode?: HTMLElement | null) {
         if (targetNode) {
             const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
-            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+            const listNode = this.getListNode(targetNode);
 
             if (buttonNode) {
                 buttonNode.classList.remove("widget-pagination-hide-load-more");
@@ -210,9 +210,10 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         const { targetListView, targetNode, validationPassed } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
+            const listNode = this.getListNode(targetNode);
+
             this.setListViewListHeight(targetNode);
-            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
-            listNode.innerHTML = "";
+            this.setListNodeToEmpty(listNode);
             targetListView._datasource.setOffset(offSet);
             targetListView._showLoadingIcon();
             targetListView.sequence([ "_sourceReload", "_renderData" ]);
@@ -228,6 +229,15 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
 
     private setListViewListHeight(targetNode: HTMLElement) {
         const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+
         listNode.style.height = `${this.listListViewHeight}px`;
+    }
+
+    private getListNode(targetNode: HTMLElement): HTMLUListElement {
+        return targetNode.querySelector("ul") as HTMLUListElement;
+    }
+
+    private setListNodeToEmpty(listNode: HTMLUListElement) {
+        listNode.innerHTML = "";
     }
 }

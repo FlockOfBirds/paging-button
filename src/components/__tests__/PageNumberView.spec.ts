@@ -7,12 +7,13 @@ import * as classNames from "classnames";
 describe("PageNumberView", () => {
 
     it("renders the active structure correctly", () => {
-        const pageNumber = 2;
+        const pageNumber = 5;
 
         const pageNumberView = shallow(createElement(PageNumberView, {
-            onClick: () => jasmine.any(Function),
-            page: pageNumber,
-            selected: true
+            onClickAction: () => jasmine.any(Function),
+            pageCount: 10,
+            pageNumber,
+            selectedPageNumber: 5
         }));
 
         expect(pageNumberView).toBeElement(
@@ -29,12 +30,13 @@ describe("PageNumberView", () => {
     });
 
     it("renders the disabled structure correctly", () => {
-        const pageNumber = 20;
+        const pageNumber = 5;
 
         const pageNumberView = shallow(createElement(PageNumberView, {
-            onClick: () => jasmine.any(Function),
-            page: pageNumber,
-            selected: false
+            onClickAction: () => jasmine.any(Function),
+            pageCount: 10,
+            pageNumber,
+            selectedPageNumber: 5
         }));
 
         expect(pageNumberView).toBeElement(
