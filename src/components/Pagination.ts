@@ -332,6 +332,6 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
             selectedPageNumber: pageNumber
         });
 
-        this.props.onClickAction(this.state.currentOffset, pageNumber);
+        this.props.onClickAction(currentOffset, pageNumber);
     }
 }

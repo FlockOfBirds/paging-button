@@ -19,8 +19,13 @@ interface PaginationContainerState {
     message: string;
     offset: number;
     hideUnusedPaging: boolean;
+    isLoadingItems: boolean;
     publishedOffset?: number;
     publishedPageNumber?: number;
+    pendingOffset?: number;
+    pendingPageNumber?: number;
+    currentOffset?: number;
+    currentPageNumber?: number;
     targetListView?: ListView | null;
     targetNode?: HTMLElement | null;
     updateSource?: UpdateSourceType;
@@ -45,6 +50,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         this.state = {
             findingListViewWidget: true,
             hideUnusedPaging: false,
+            isLoadingItems: false,
             listViewSize: 0,
             message: "",
             offset: 1
@@ -146,6 +152,17 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                         }
                     });
 
+                    dojoAspect.after(targetListView, "_renderData", () => {
+                        const { pendingPageNumber, pendingOffset, currentOffset } = this.state;
+
+                        if (pendingPageNumber && pendingOffset && pendingOffset !== currentOffset) {
+                            this.setState({ isLoadingItems: false });
+                            this.updateListView(pendingOffset, pendingPageNumber);
+                        } else {
+                            this.setState({ isLoadingItems: false });
+                        }
+                    });
+
                     dojoTopic.subscribe(targetListView.friendlyId, (message: number[]) => {
                         if (this.state.targetListView) {
                             this.setState({
@@ -207,17 +224,26 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
     }
 
     private updateListView(offSet: number, pageNumber: number) {
-        const { targetListView, targetNode, validationPassed } = this.state;
+        const { targetListView, targetNode, validationPassed, isLoadingItems } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
             const listNode = this.getListNode(targetNode);
+            this.setState({ pendingOffset: offSet, pendingPageNumber: pageNumber });
 
-            this.setListViewListHeight(targetNode);
-            this.setListNodeToEmpty(listNode);
-            targetListView._datasource.setOffset(offSet);
-            targetListView._showLoadingIcon();
-            targetListView.sequence([ "_sourceReload", "_renderData" ]);
-            this.publishOffsetUpdate(offSet, pageNumber);
+            if (!isLoadingItems) {
+                this.setState({
+                    currentOffset: offSet,
+                    currentPageNumber: pageNumber,
+                    isLoadingItems: true
+                });
+
+                this.setListViewListHeight(targetNode);
+                this.setListNodeToEmpty(listNode);
+                targetListView._datasource.setOffset(offSet);
+                targetListView._showLoadingIcon();
+                targetListView.sequence([ "_sourceReload", "_renderData" ]);
+                this.publishOffsetUpdate(offSet, pageNumber);
+            }
         }
     }
 
