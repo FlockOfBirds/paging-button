@@ -140,7 +140,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                     dojoAspect.after(targetListView, "_onLoad", () => {
                         if (this.state.targetListView) {
                             const listViewHTML = this.getTargetNode();
-                            this.setListViewListHeight(listViewHTML);
+                            this.maintainListViewStructure(listViewHTML);
 
                             this.setState({
                                 listViewSize: this.state.targetListView._datasource._setSize,
@@ -161,6 +161,8 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                         } else {
                             this.setState({ isLoadingItems: false });
                         }
+
+                        this.resetListViewStructure(this.state.targetNode as HTMLElement);
                     });
 
                     dojoTopic.subscribe(targetListView.friendlyId, (message: number[]) => {
@@ -237,7 +239,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
                     isLoadingItems: true
                 });
 
-                this.setListViewListHeight(targetNode);
+                this.maintainListViewStructure(targetNode);
                 this.setListNodeToEmpty(listNode);
                 targetListView._datasource.setOffset(offSet);
                 targetListView._showLoadingIcon();
@@ -253,10 +255,18 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         }
     }
 
-    private setListViewListHeight(targetNode: HTMLElement) {
+    private maintainListViewStructure(targetNode: HTMLElement) {
         const listNode = targetNode.querySelector("ul") as HTMLUListElement;
 
         listNode.style.height = `${this.listListViewHeight}px`;
+        listNode.style.overflow = "hidden";
+    }
+
+    private resetListViewStructure(targetNode: HTMLElement) {
+        const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+
+        listNode.style.removeProperty("height");
+        listNode.style.removeProperty("overflow");
     }
 
     private getListNode(targetNode: HTMLElement): HTMLUListElement {
