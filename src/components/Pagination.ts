@@ -105,7 +105,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 createElement(PageNumberView, {
                     maxPageButtons: 7,
                     onClickAction: this.updatePagination,
-                    pageCount: 0,
+                    pageCount: this.state.pageCount,
                     selectedPageNumber: this.state.selectedPageNumber
                 })
             ];

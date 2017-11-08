@@ -1,10 +1,13 @@
-import { shallow } from "enzyme";
 import { createElement } from "react";
+import { configure, shallow } from "enzyme";
+import Adapter = require("enzyme-adapter-react-15");
 
 import { Pagination, PaginationProps } from "../Pagination";
 import { PageButton, PageButtonProps } from "../PageButton";
 import { ButtonType, IconType } from "../../utils/ContainerUtils";
 import { PageNumberView, PageNumberViewProps } from "../PageNumberView";
+
+configure({ adapter: new Adapter() });
 
 describe("Pagination", () => {
 
@@ -378,7 +381,7 @@ describe("Pagination", () => {
     const defaultPageNumberViewProps: PageNumberViewProps = {
         maxPageButtons: 7,
         onClickAction: jasmine.any(Function),
-        pageCount: 0,
+        pageCount: 16,
         selectedPageNumber: 1
     };
 });

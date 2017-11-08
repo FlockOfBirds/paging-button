@@ -37,18 +37,18 @@
   "devDependencies": {
     "@types/classnames": "^2.2.3",
     "@types/core-js": "^0.9.43",
-    "@types/enzyme": "^2.8.7",
+    "@types/enzyme": "^3.1.2",
     "@types/jasmine": "^2.5.54",
-    "@types/karma": "^0.13.36",
-    "@types/log4js": "0.0.33",
+    "@types/karma": "^1.7.1",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.4",
     "@types/webdriverio": "^4.8.2",
     "check-dependencies": "^1.1.0",
-    "copy-webpack-plugin": "^4.0.1",
+    "copy-webpack-plugin": "^4.2.0",
     "core-js": "^2.5.1",
     "css-loader": "^0.28.7",
-    "enzyme": "^2.9.1",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "extract-text-webpack-plugin": "^3.0.0",
     "grunt": "1.0.1",
     "grunt-check-dependencies": "^1.0.0",
@@ -86,10 +86,10 @@
     "remap-istanbul": "^0.9.0",
     "sass-loader": "^6.0.3",
     "source-map-loader": "^0.2.1",
-    "style-loader": "^0.18.2",
-    "ts-loader": "^2.3.7",
-    "tslint": "^5.7.0",
-    "tslint-eslint-rules": "^4.1.0",
+    "style-loader": "^0.19.0",
+    "ts-loader": "^3.1.1",
+    "tslint": "^5.8.0",
+    "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.5.3",
     "wdio-dot-reporter": "0.0.9",
     "wdio-jasmine-framework": "^0.3.2",
@@ -97,10 +97,11 @@
     "wdio-spec-reporter": "^0.1.2",
     "webdriverio": "^4.8.0",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.8.2",
-    "webpack-merge": "^4.1.0"
+    "webpack-dev-server": "^2.9.4",
+    "webpack-merge": "^4.1.1"
   },
   "dependencies": {
+    "@types/enzyme-adapter-react-15": "^1.0.0",
     "classnames": "^2.2.5"
   }
 }

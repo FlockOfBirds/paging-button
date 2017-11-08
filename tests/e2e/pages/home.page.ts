@@ -9,13 +9,15 @@ class Home {
 
     public get previousButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-previous"); }
 
-    public get customButtonTwo() { return browser.element(".mx-name-pagination9 > div > ul > li:nth-child(2)"); }
+    public get customButtonTwo() { return browser.element(".mx-name-pagination11 > div > ul > li:nth-child(2)"); }
 
     public get lastButton() { return browser.element(".mx-name-pagination9 > div > button.btn.mx-button.mx-name-paging-last"); }
 
     public get listViewFirstItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-0 > div > div > span"); }
 
     public get listViewThirdItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-2 > div > div > span"); }
+
+    public get listView4ThirdItem() { return browser.elements(".mx-name-listView4 > ul > li.mx-listview-item.mx-name-index-2 > div > div > span"); }
 
     public get listViewFifthItem() { return browser.elements(".mx-name-listView1 > ul > li.mx-listview-item.mx-name-index-4 > div > div > span"); }
 

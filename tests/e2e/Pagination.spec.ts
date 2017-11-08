@@ -4,7 +4,6 @@ import indexPage from "./pages/index.page";
 const testValueOne = "Color 1";
 const testValueFive = "Color 5";
 const testValueSeven = "Color 7";
-const testValueThird = "Color 3";
 const testLastItemValue = "Color 19";
 
 describe("Pagination", () => {
@@ -87,9 +86,9 @@ describe("Pagination", () => {
         page.open();
         page.customButtonTwo.waitForVisible();
         page.customButtonTwo.click();
-        page.listViewThirdItem.waitForVisible();
+        page.listView4ThirdItem.waitForVisible();
 
-        const thirdItemValue = page.listViewThirdItem.getHTML();
-        expect(thirdItemValue).toContain(testValueThird);
+        const thirdItemValue = page.listView4ThirdItem.getHTML();
+        expect(thirdItemValue).toContain("Color P 3");
     });
 });

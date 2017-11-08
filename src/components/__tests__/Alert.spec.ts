@@ -1,7 +1,10 @@
 import { createElement } from "react";
-import { shallow } from "enzyme";
+import { configure, shallow } from "enzyme";
+import Adapter = require("enzyme-adapter-react-15");
 
 import { Alert } from "../Alert";
+
+configure({ adapter: new Adapter() });
 
 describe("Alert", () => {
     it("renders the structure correctly", () => {

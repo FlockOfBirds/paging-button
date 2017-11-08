@@ -1,9 +1,12 @@
-import { shallow } from "enzyme";
 import { createElement } from "react";
+import { configure, shallow } from "enzyme";
+import Adapter = require("enzyme-adapter-react-15");
 import * as classNames from "classnames";
 
 import { PageNumberView, PageNumberViewProps } from "../PageNumberView";
 import { BreakView } from "../BreakView";
+
+configure({ adapter: new Adapter() });
 
 describe("PageNumberView", () => {
 
@@ -88,7 +91,7 @@ describe("PageNumberView", () => {
             };
 
             const pageNumberView = shallowRenderPageNumberView(pageNumberViewProps);
-            const pageNumberButton = pageNumberView.find("li").at(7);
+            const pageNumberButton = pageNumberView.find("li").at(5);
             pageNumberButton.simulate("click");
             const breakViews = pageNumberView.find(BreakView);
 
@@ -107,12 +110,8 @@ describe("PageNumberView", () => {
     const getDefaultPageNumberView = (pageNumber: number, props: PageNumberViewProps) =>
         createElement("li", {
                 className: classNames(
-                    props.selectedPageNumber === pageNumber
-                        ? "active"
-                        : "",
-                    pageNumber < 10
-                        ? "single-digit"
-                        : ""
+                    props.selectedPageNumber === pageNumber ? "active" : "",
+                    pageNumber < 10 ? "single-digit" : ""
                 ),
                 onClick: jasmine.any(Function)
             },

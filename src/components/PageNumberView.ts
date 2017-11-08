@@ -78,12 +78,8 @@ export const PageNumberView: SFC<PageNumberViewProps> = (props) => {
 const getPageNumberView = (pageNumber: number, props: PageNumberViewProps) => {
     return createElement("li", {
             className: classNames(
-                props.selectedPageNumber === pageNumber
-                    ? "active"
-                    : "",
-                pageNumber < 10
-                    ? "single-digit"
-                    : ""
+                props.selectedPageNumber === pageNumber ? "active" : "",
+                pageNumber < 10 ? "single-digit" : ""
             ),
             onClick: () => props.onClickAction(pageNumber)
         },
