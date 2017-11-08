@@ -103,9 +103,9 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
             return [
                 createElement(PageNumberView, {
+                    maxPageButtons: 7,
                     onClickAction: this.updatePagination,
-                    pageCount: this.state.pageCount,
-                    pageNumber: 7,
+                    pageCount: 0,
                     selectedPageNumber: this.state.selectedPageNumber
                 })
             ];
@@ -157,9 +157,9 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
 
             if (buttonProps.buttonType === "pageNumberButtons") {
                 return createElement(PageNumberView, {
+                    maxPageButtons: option.maxPageButtons,
                     onClickAction: this.updatePagination,
                     pageCount: this.state.pageCount,
-                    pageNumber: option.maxPageButtons,
                     selectedPageNumber: this.state.selectedPageNumber
                 });
             }

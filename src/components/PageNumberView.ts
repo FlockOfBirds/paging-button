@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 import { BreakView } from "./BreakView";
 
 export interface PageNumberViewProps {
-    pageNumber: number;
+    maxPageButtons: number;
     pageCount: number;
     selectedPageNumber: number;
     onClickAction: (pageNumber: number) => void;
@@ -16,22 +16,22 @@ export const PageNumberView: SFC<PageNumberViewProps> = (props) => {
     let leftSide;
     let rightSide;
     let breakViewAdded = false;
-    const divider = Math.ceil(props.pageNumber / 2);
+    const divider = Math.ceil(props.maxPageButtons / 2);
 
-    if (props.pageCount <= props.pageNumber) {
-        for (let pageIndex = 1; pageIndex <= props.pageCount; pageIndex++) {
+    if (props.pageCount <= props.maxPageButtons) {
+        for (let pageIndex = 1; pageIndex <= props.maxPageButtons; pageIndex++) {
             pageItems.push(getPageNumberView(pageIndex, props));
         }
     } else {
         leftSide = divider;
-        rightSide = props.pageNumber - leftSide;
+        rightSide = props.maxPageButtons - leftSide;
 
         if (props.selectedPageNumber > props.pageCount - divider) {
             rightSide = props.pageCount - props.selectedPageNumber;
-            leftSide = props.pageNumber - rightSide;
+            leftSide = props.maxPageButtons - rightSide;
         } else if (props.selectedPageNumber < divider) {
             leftSide = props.selectedPageNumber;
-            rightSide = props.pageNumber - leftSide;
+            rightSide = props.maxPageButtons - leftSide;
         }
 
         for (let page = 1; page <= props.pageCount; page++) {
@@ -78,8 +78,12 @@ export const PageNumberView: SFC<PageNumberViewProps> = (props) => {
 const getPageNumberView = (pageNumber: number, props: PageNumberViewProps) => {
     return createElement("li", {
             className: classNames(
-                props.selectedPageNumber === pageNumber ? "active" : "",
-                pageNumber < 10 ? "single-digit" : ""
+                props.selectedPageNumber === pageNumber
+                    ? "active"
+                    : "",
+                pageNumber < 10
+                    ? "single-digit"
+                    : ""
             ),
             onClick: () => props.onClickAction(pageNumber)
         },
