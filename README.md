@@ -28,16 +28,23 @@ Mendix 7.7.1
 
 [https://pagination100.mxapps.io/](https://pagination100.mxapps.io/)
 
-![Demo](/assets/demo.gif)
+![Default buttons](/assets/demo.gif) ![Page buttons](/assets/demo2.gif)
 
 ## Usage
 
 ### Appearance configuration
 
 ![Data source](/assets/Appearance.png)
- - On the `Auto hide first and last button` option of the `Appearance` 
- tab, specify if the two buttons should be hidden when they are not need.
- For example when the records are few
+ - On the `Hide unused paging` option of the `Appearance` 
+ tab, specify if the buttons should be hidden when they are not needed.For example when the records are few.
+  * On the `Page style` option of the `Appearance` 
+  tab, specify how the buttons should look.
+    * `Default`
+     shows the pagination with the looks similar to Mendix data grid paging
+    * `Page number buttons`
+     show the pagination as numbers with default set to seven
+    * `Custom`
+     Allows the pagination to be configured to look the way one desires
 
 ## Issues, suggestions and feature requests
 Please report issues at [https://github.com/mendixlabs/paging-button/issues](https://github.com/mendixlabs/paging-button/issues).
