@@ -28,6 +28,13 @@ const widgetConfig = {
                     fallback: "style-loader",
                     use: "css-loader!sass-loader"
                 })
+            },
+            {
+                test: /\.gif$/,
+                use: [ {
+                    loader: "url-loader",
+                    options: { limit: 8192 }
+                } ]
             }
         ]
     },

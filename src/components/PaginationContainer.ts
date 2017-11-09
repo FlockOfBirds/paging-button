@@ -6,7 +6,11 @@ import * as dojoConnect from "dojo/_base/connect";
 import * as dojoAspect from "dojo/aspect";
 import * as dojoTopic from "dojo/topic";
 
-import { ListView, UpdateSourceType, WrapperProps, findTargetNode, parseStyle } from "../utils/ContainerUtils";
+import {
+    ListView, UpdateSourceType, WrapperProps, findTargetNode, getListNode, hideLoadMoreButton,
+    hideLoader, parseStyle, resetListViewStructure, setListNodeToEmpty, showLoadMoreButton, showLoader
+} from "../utils/ContainerUtils";
+
 import { Pagination, PaginationProps } from "./Pagination";
 import { ValidateConfigs } from "../utils/ValidateConfigs";
 import { Alert } from "./Alert";
@@ -57,7 +61,7 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         };
 
         this.updateListView = this.updateListView.bind(this);
-        this.publishOffsetUpdate = this.publishOffsetUpdate.bind(this);
+        this.publishListViewUpdate = this.publishListViewUpdate.bind(this);
         this.findListView = this.findListView.bind(this);
         this.navigationHandler = dojoConnect.connect(props.mxform, "onNavigation", this , this.findListView);
     }
@@ -80,17 +84,11 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         );
     }
 
-    componentDidMount() {
-        const targetNode = this.getTargetNode();
-
-        this.hideLoadMoreButton(targetNode);
-    }
-
     componentWillUnmount() {
         const targetNode = this.getTargetNode();
 
         dojoConnect.disconnect(this.navigationHandler);
-        this.showLoadMoreButton(targetNode);
+        showLoadMoreButton(targetNode);
     }
 
     private getTargetNode(): HTMLElement {
@@ -126,59 +124,99 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
             let listViewSize = 0;
             let offset = 0;
             let dataSource: ListView["_datasource"];
+            let listNode: HTMLUListElement;
 
             if (targetNode) {
-                this.hideLoadMoreButton(targetNode);
                 targetListView = dijitRegistry.byNode(targetNode);
 
                 if (targetListView) {
+                    hideLoadMoreButton(targetNode);
+
                     dataSource = targetListView._datasource;
                     listViewSize = dataSource._setSize;
                     offset = dataSource._pageSize;
-                    hideUnusedPaging = ((offset >= dataSource._setSize) || (offset === 0)) && this.props.hideUnusedPaging;
+                    hideUnusedPaging = this.isHideUnUsed(targetListView);
+                    listNode = targetNode.querySelector("ul") as HTMLUListElement;
+                    this.listListViewHeight = listNode.clientHeight;
 
-                    dojoAspect.after(targetListView, "_onLoad", () => {
-                        if (this.state.targetListView) {
-                            const listViewHTML = this.getTargetNode();
-                            this.maintainListViewStructure(listViewHTML);
-
-                            this.setState({
-                                listViewSize: this.state.targetListView._datasource._setSize,
-                                offset,
-                                publishedOffset: 0,
-                                publishedPageNumber: 1,
-                                updateSource: "other"
-                            });
-                        }
-                    });
-
-                    dojoAspect.after(targetListView, "_renderData", () => {
-                        const { pendingPageNumber, pendingOffset, currentOffset } = this.state;
-
-                        if (pendingPageNumber && pendingOffset && pendingOffset !== currentOffset) {
-                            this.setState({ isLoadingItems: false });
-                            this.updateListView(pendingOffset, pendingPageNumber);
-                        } else {
-                            this.setState({ isLoadingItems: false });
-                        }
-
-                        this.resetListViewStructure(this.state.targetNode as HTMLElement);
-                    });
-
-                    dojoTopic.subscribe(targetListView.friendlyId, (message: number[]) => {
-                        if (this.state.targetListView) {
-                            this.setState({
-                                publishedOffset: message[0],
-                                publishedPageNumber: message[1],
-                                updateSource: "multiple"
-                            });
-                        }
-                    });
+                    this.afterListViewLoad(targetListView, targetNode);
+                    this.afterListViewDataRender(targetListView);
+                    this.beforeListViewDataRender(targetListView);
+                    this.subScribeToListViewChanges(targetListView);
                 }
             }
 
             this.validateListView({ targetNode, targetListView, hideUnusedPaging, listViewSize, offset });
         }
+    }
+
+    private subScribeToListViewChanges(targetListView: ListView) {
+        dojoTopic.subscribe(targetListView.friendlyId, (message: number[]) => {
+            if (this.state.targetListView) {
+                this.setState({
+                    publishedOffset: message[0],
+                    publishedPageNumber: message[1],
+                    updateSource: "multiple"
+                });
+            }
+        });
+    }
+
+    private afterListViewLoad(targetListView: ListView, targetNode: HTMLElement) {
+        dojoAspect.after(targetListView, "_onLoad", () => {
+            hideLoadMoreButton(targetNode);
+
+            if (this.state.targetListView && this.state.targetNode) {
+                targetNode = this.state.targetNode;
+                const dataSource = this.state.targetListView._datasource;
+                const listViewSize = dataSource._setSize;
+                const offset = dataSource._pageSize;
+                const hideUnusedPaging = this.isHideUnUsed(this.state.targetListView) ;
+                const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+                this.listListViewHeight = listNode.clientHeight;
+
+                this.maintainListViewStructure(targetNode);
+
+                this.setState({
+                    findingListViewWidget: false,
+                    hideUnusedPaging,
+                    listViewSize,
+                    offset,
+                    publishedOffset: 0,
+                    publishedPageNumber: 1,
+                    targetListView,
+                    targetNode,
+                    updateSource: "other"
+                });
+            }
+        });
+    }
+
+    private beforeListViewDataRender(targetListView: ListView) {
+        dojoAspect.before(targetListView, "_renderData", () => {
+            if (this.state.targetNode) {
+                const listNode = getListNode(this.state.targetNode);
+
+                setListNodeToEmpty(listNode);
+            }
+        });
+    }
+
+    private afterListViewDataRender(targetListView: ListView) {
+        dojoAspect.after(targetListView, "_renderData", () => {
+            const { pendingPageNumber, pendingOffset, currentOffset } = this.state;
+
+            if (pendingPageNumber && pendingOffset && pendingOffset !== currentOffset) {
+                this.updateListView(pendingOffset, pendingPageNumber);
+            }
+
+            if (this.state.targetListView) {
+                this.setState({ isLoadingItems: false });
+            }
+
+            resetListViewStructure(this.state.targetNode as HTMLElement);
+            hideLoader(this.state.targetListView as ListView);
+        });
     }
 
     private validateListView(props: ValidateProps) {
@@ -200,80 +238,46 @@ export default class PaginationContainer extends Component<WrapperProps, Paginat
         });
     }
 
-    private hideLoadMoreButton(targetNode?: HTMLElement | null) {
-        if (targetNode) {
-            const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
-
-            if (buttonNode) {
-                buttonNode.classList.add("widget-pagination-hide-load-more");
-            }
-
-            this.listListViewHeight = targetNode.clientHeight;
-        }
-    }
-
-    private showLoadMoreButton(targetNode?: HTMLElement | null) {
-        if (targetNode) {
-            const buttonNode = targetNode.querySelector(".mx-listview-loadMore") as HTMLButtonElement;
-            const listNode = this.getListNode(targetNode);
-
-            if (buttonNode) {
-                buttonNode.classList.remove("widget-pagination-hide-load-more");
-            }
-
-            listNode.style.removeProperty("height");
-        }
-    }
-
     private updateListView(offSet: number, pageNumber: number) {
         const { targetListView, targetNode, validationPassed, isLoadingItems } = this.state;
 
         if (targetListView && targetNode && validationPassed) {
-            const listNode = this.getListNode(targetNode);
             this.setState({ pendingOffset: offSet, pendingPageNumber: pageNumber });
 
             if (!isLoadingItems) {
+                showLoader(targetListView);
+
                 this.setState({
                     currentOffset: offSet,
                     currentPageNumber: pageNumber,
                     isLoadingItems: true
                 });
 
-                this.maintainListViewStructure(targetNode);
-                this.setListNodeToEmpty(listNode);
                 targetListView._datasource.setOffset(offSet);
-                targetListView._showLoadingIcon();
                 targetListView.sequence([ "_sourceReload", "_renderData" ]);
-                this.publishOffsetUpdate(offSet, pageNumber);
+                this.publishListViewUpdate(offSet, pageNumber);
             }
         }
     }
 
-    private publishOffsetUpdate(offSet: number, pageNumber: number) {
+    private publishListViewUpdate(offSet: number, pageNumber: number) {
         if (this.state.targetListView) {
             dojoTopic.publish(this.state.targetListView.friendlyId, [ offSet, pageNumber ]);
         }
     }
 
     private maintainListViewStructure(targetNode: HTMLElement) {
-        const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+        if (this.listListViewHeight > 0) {
+            const listNode = targetNode.querySelector("ul") as HTMLUListElement;
 
-        listNode.style.height = `${this.listListViewHeight}px`;
-        listNode.style.overflow = "hidden";
+            listNode.style.height = `${this.listListViewHeight}px`;
+            listNode.style.overflow = "hidden";
+        }
     }
 
-    private resetListViewStructure(targetNode: HTMLElement) {
-        const listNode = targetNode.querySelector("ul") as HTMLUListElement;
+    private isHideUnUsed(targetListView: ListView): boolean {
+        const offset = targetListView._datasource._pageSize;
 
-        listNode.style.removeProperty("height");
-        listNode.style.removeProperty("overflow");
-    }
-
-    private getListNode(targetNode: HTMLElement): HTMLUListElement {
-        return targetNode.querySelector("ul") as HTMLUListElement;
-    }
-
-    private setListNodeToEmpty(listNode: HTMLUListElement) {
-        listNode.innerHTML = "";
+        return ((offset >= targetListView._datasource._setSize) || (offset === 0)) && this.props.hideUnusedPaging;
     }
 }

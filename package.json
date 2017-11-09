@@ -92,6 +92,7 @@
     "tslint": "^5.8.0",
     "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.5.3",
+    "url-loader": "^0.6.2",
     "wdio-dot-reporter": "0.0.9",
     "wdio-jasmine-framework": "^0.3.2",
     "wdio-selenium-standalone-service": "0.0.9",

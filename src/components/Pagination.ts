@@ -307,7 +307,7 @@ export class Pagination extends Component<PaginationProps, PaginationState> {
                 .replace("{firstItem}", fromValue.toString())
                 .replace("{lastItem}", toValue.toString())
                 .replace("{totalItems}", listViewSize.toString())
-                .replace("{currentPageNumber}", this.state.selectedPageNumber.toString())
+                .replace("{currentPageNumber}", this.state.selectedPageNumber ? this.state.selectedPageNumber.toString() : "0")
                 .replace("{totalPages}", totalPages.toString());
         }
 

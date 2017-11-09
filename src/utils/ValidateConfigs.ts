@@ -35,7 +35,6 @@ export class ValidateConfigs {
             && targetListView._sourceReload
             && targetListView._renderData
             && targetListView._datasource._setSize !== undefined
-            && targetListView._showLoadingIcon
             && targetListView.update);
     }
 }
